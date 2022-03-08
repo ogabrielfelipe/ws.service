@@ -19,7 +19,7 @@ def login():
     token = autentica_usuario(username=resp['username'], senha=resp['senha'])
     if token is None:
         return jsonify({'message': 'Token não gerado', 'Token': {}}), 404
-    return jsonify({"msg": "login successful", 'token_acess': token[0], 'token_refresh': token[1]}), 200
+    return jsonify({"msg": "login successful", 'token_access': token[0], 'token_refresh': token[1]}), 200
 
 
 @aut.route("/Auth/Refresh", methods=["POST"])
@@ -33,7 +33,7 @@ def refresh():
         "acesso": identity['acesso'],
         "email": identity['email']
     }
-    return jsonify({"access_token":access_token, "acesso_usuario": usuario})
+    return jsonify({"access_token":access_token, "usuario": usuario})
 
 
 @aut.route('/Auth/Logout', methods=['DELETE'])
