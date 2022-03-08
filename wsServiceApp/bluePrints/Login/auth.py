@@ -23,7 +23,7 @@ def login():
 
 
 @aut.route("/Auth/Refresh", methods=["POST"])
-@jwt_required(refresh=True)
+@jwt_required()
 def refresh():
     identity = get_jwt_identity()
     access_token = create_access_token(identity=identity, fresh=True)
