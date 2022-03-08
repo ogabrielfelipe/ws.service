@@ -23,7 +23,7 @@ user = Blueprint('user', __name__)
 
 
 @user.route('/Usuario/Cadastrar', methods=['POST'])
-#@jwt_required(locations=["headers"])
+@jwt_required(locations=["headers"])
 def cadastra_user():
     return cadastra_usuario()
 
