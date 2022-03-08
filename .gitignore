@@ -1,8 +1,8 @@
-/__pycache__
-/venv
-/wsServiceApp/__pycache__
-/wsServiceApp/bluePrints/__pycache__
-/wsServiceApp/bluePrints/Login/__pycache__
-/wsServiceApp/bluePrints/Usuario/__pycache__
-/wsServiceApp/controller/__pycache__
-/wsServiceApp/model/__pycache__
+__pycache__/
+venv/
+/wsServiceApp/__pycache__/
+/wsServiceApp/bluePrints/__pycache__/
+/wsServiceApp/bluePrints/Login/__pycache__/
+/wsServiceApp/bluePrints/Usuario/__pycache__/
+/wsServiceApp/controller/__pycache__/
+/wsServiceApp/model/__pycache__/
