@@ -1,5 +1,4 @@
 from flask import Blueprint
-from flask_jwt_extended import jwt_required
 from wsServiceApp.controller.UsuarioController import (
     cadastra_usuario,
     atualiza_usuario,
