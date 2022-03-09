@@ -22,7 +22,7 @@ passwd = "wIszTw5!&#9Z"
 
 DEBUG = True
 #SQLALCHEMY_DATABASE_URI = f"sqlite:///{config.get('DATABASE', 'DB')}"
-SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}"
+SQLALCHEMY_DATABASE_URI =f"postgresql+psycopg2://ylwcvdoqhepgzk:ed14a8f362a6432a464b330282b1d670ecdf667c5f0f0fa2d359f635635a34c7@ec2-3-216-221-31.compute-1.amazonaws.com:5432/d27i67urteslmd"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 JSONIFY_PRETTYPRINT_REGULAR = False
 SECRET_KEY = chave
