@@ -19,7 +19,7 @@ def login():
     token = autentica_usuario(username=resp['username'], senha=resp['senha'])
     if token is None:
         return jsonify({'message': 'Token não gerado', 'Token': {}}), 404
-    return jsonify({"msg": "login successful", 'token_access': token[0]}), 200
+    return jsonify({"msg": "login successful", 'token_access': token}), 200
 
 
 @aut.route("/Auth/Refresh", methods=["POST"])
