@@ -26,7 +26,7 @@ def login():
 @jwt_required()
 def refresh():
     identity = get_jwt_identity()
-    access_token = create_access_token(identity=identity, fresh=True)
+    access_token = create_access_token(identity=identity, fresh=False)
     usuario = {
         "nome": identity['nome'],
         "username": identity['username'],
