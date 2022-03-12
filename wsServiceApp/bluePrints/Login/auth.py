@@ -26,10 +26,11 @@ def login():
 @jwt_required()
 def refresh():
     identity = get_jwt_identity()
+    access_token = create_access_token(identity=identity)
     usuario = {
         "nome": identity['nome'],
         "username": identity['username'],
         "acesso": identity['acesso'],
         "email": identity['email']
     }
-    return jsonify({"usuario": usuario})
+    return jsonify({"access_token": access_token, "usuario": usuario}), 200
