@@ -35,8 +35,6 @@ def autentica_usuario(username, senha):
     user_json = usuario_schema.dump(user)
     if user and check_password_hash(user.senha, senha):
         access_token = create_access_token(identity=user_json)
-        refresh_token = create_refresh_token(identity=user_json)
-        
         return access_token, refresh_token
     else:
         return None

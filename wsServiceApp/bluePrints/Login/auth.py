@@ -19,18 +19,17 @@ def login():
     token = autentica_usuario(username=resp['username'], senha=resp['senha'])
     if token is None:
         return jsonify({'message': 'Token não gerado', 'Token': {}}), 404
-    return jsonify({"msg": "login successful", 'token_access': token[0],'refresh_token': token[1]}), 200
+    return jsonify({"msg": "login successful", 'token_access': token}), 200
 
 
-@aut.route("/Auth/Refresh", methods=["POST"])
-@jwt_required(refresh=True)
+@aut.route("/Auth/User", methods=["POST"])
+@jwt_required()
 def refresh():
     identity = get_jwt_identity()
-    access_token = create_access_token(identity=identity)
     usuario = {
         "nome": identity['nome'],
         "username": identity['username'],
         "acesso": identity['acesso'],
         "email": identity['email']
     }
-    return jsonify({"access_token": access_token, "usuario": usuario})
+    return jsonify({"usuario": usuario})
