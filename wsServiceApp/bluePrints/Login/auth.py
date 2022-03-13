@@ -28,7 +28,7 @@ def login():
         return response, 404
 
     response = jsonify({"msg": "login successful"})
-    response.headers['token_access'] = token
+    response.headers['Authorization'] = token
     return response
 
 
