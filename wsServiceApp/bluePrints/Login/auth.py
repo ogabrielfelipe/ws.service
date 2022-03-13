@@ -1,5 +1,8 @@
+import datetime
+from sqlite3 import Date
 from flask import Blueprint, request, jsonify
 from ...controller.UsuarioController import autentica_usuario
+from jwt import decode
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,
@@ -25,8 +28,15 @@ def login():
 @aut.route("/Auth/Refresh", methods=["GET"])
 @jwt_required(fresh=True)
 def refresh():
+    token_client = get_jwt()
+    nbf = datetime.datetime.fromtimestamp(token_client['nbf'])
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
     identity = get_jwt_identity()
-    access_token = create_access_token(identity=identity, fresh=True)
+
+    access_token = ''
+    if exp <= nbf+datetime.timedelta(minutes=50):
+        access_token = create_access_token(identity=identity, fresh=True)
     usuario = {
         "nome": identity['nome'],
         "username": identity['username'],
