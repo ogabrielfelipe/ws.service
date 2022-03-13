@@ -22,7 +22,7 @@ def login():
     return jsonify({"msg": "login successful", 'token_access': token}), 200
 
 
-@aut.route("/Auth/User", methods=["GET"])
+@aut.route("/Auth/Refresh", methods=["GET"])
 @jwt_required()
 def refresh():
     identity = get_jwt_identity()
