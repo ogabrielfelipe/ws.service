@@ -25,10 +25,12 @@ def login():
     if token is None:
         response = jsonify({'msg': 'Token não gerado'})
         response.headers['token_access'] = ''
+        response.headers['Access-Control-Expose-Headers'] = 'token_access'
         return response, 404
 
     response = jsonify({"msg": "login successful"})
-    response.headers['Access-Control-Expose-Headers'] = token
+    response.headers['token_access'] = token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -51,6 +53,7 @@ def refresh():
         "email": identity['email']
     }
     response = jsonify({"access_token": access_token, "usuario": usuario})
-    response.headers['Access-Control-Expose-Headers'] = access_token
+    response.headers['token_access']= access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
 
     return response
