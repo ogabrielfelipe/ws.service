@@ -35,6 +35,7 @@ def cad_setor():
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_setor()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -51,6 +52,7 @@ def alter_setor(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_setor(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -67,6 +69,7 @@ def busc_setor(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_setor(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -83,6 +86,7 @@ def busc_setores():
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_setores()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -99,5 +103,6 @@ def excluir_setor(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_setor(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 

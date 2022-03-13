@@ -35,6 +35,7 @@ def cad_sistema():
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_sistema()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -51,6 +52,7 @@ def alter_sistema(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_sistema(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -67,6 +69,7 @@ def busc_sistema(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_sistema(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -83,6 +86,7 @@ def busc_sistemas():
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_sistemas()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -99,4 +103,5 @@ def excluir_sistema(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_sistema(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response

@@ -37,6 +37,7 @@ def cad_competencia():
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_competencia(usuario=get_jwt_identity())
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -53,6 +54,7 @@ def alter_competencia(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_competencia(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -69,6 +71,7 @@ def alter_trava_competencia(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = altera_trava_competencia(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -85,6 +88,7 @@ def busc_competencia(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_competencia(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -101,6 +105,7 @@ def busc_competencias():
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_competencias()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -117,4 +122,5 @@ def exclui_competencia(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_competencia(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response

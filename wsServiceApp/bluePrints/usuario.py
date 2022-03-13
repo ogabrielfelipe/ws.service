@@ -34,6 +34,7 @@ def cadastra_user():
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_usuario()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -50,6 +51,7 @@ def atualiza_user(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_usuario(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -66,6 +68,7 @@ def busca_todos():
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_usuarios()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -82,4 +85,5 @@ def busca_user(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_usuario(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response

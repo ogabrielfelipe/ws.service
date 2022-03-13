@@ -36,6 +36,7 @@ def cad_solicitante():
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_solicitante()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -52,6 +53,7 @@ def alter_solicitante(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_cadastro(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -68,6 +70,7 @@ def busc_Solicitante(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_solicitante(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -84,6 +87,7 @@ def busc_Solicitantes():
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_solicitantes()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -100,4 +104,5 @@ def exclui_solicitante(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_solicitante(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response

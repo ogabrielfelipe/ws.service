@@ -37,6 +37,7 @@ def cad_modulo():
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_modulo()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -53,6 +54,7 @@ def alter_modulo(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_modulo(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -69,6 +71,7 @@ def busc_modulo(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_modulo(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -85,6 +88,7 @@ def busc_modulos():
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_modulos()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -101,4 +105,5 @@ def excluir_modulo(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_modulo(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response

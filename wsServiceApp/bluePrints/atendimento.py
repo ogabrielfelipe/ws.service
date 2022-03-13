@@ -36,6 +36,7 @@ def cad_atendimento():
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_atendimento(usuario=get_jwt_identity())
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -54,6 +55,7 @@ def alter_atendimento(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_atendimento(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -71,6 +73,7 @@ def busc_atendimento(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_atendimento(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -91,6 +94,7 @@ def busc_atendimentos():
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_atendimentos()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -107,4 +111,5 @@ def excluir_atendimento(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_atendimento(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response

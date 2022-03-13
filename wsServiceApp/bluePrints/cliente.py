@@ -36,6 +36,7 @@ def cad_cliente():
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_cliente()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -52,6 +53,7 @@ def busc_cliente(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_cliente(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -68,6 +70,7 @@ def busc_clientes():
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_clientes()
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
 
     return response
 
@@ -85,6 +88,7 @@ def alter_cliente(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_cliente(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
 
 
@@ -99,4 +103,5 @@ def excluir_cliente(codigo):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_cliente(codigo)
     response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
