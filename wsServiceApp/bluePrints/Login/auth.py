@@ -22,11 +22,11 @@ def login():
     return jsonify({"msg": "login successful", 'token_access': token}), 200
 
 
-@aut.route("/Auth/Refresh", methods=["GET"])
-@jwt_required()
+@aut.route("/Auth/Refresh", methods=["POST"])
+@jwt_required(fresh=True)
 def refresh():
     identity = get_jwt_identity()
-    access_token = create_access_token(identity=identity)
+    access_token = create_access_token(identity=identity, fresh=True)
     usuario = {
         "nome": identity['nome'],
         "username": identity['username'],

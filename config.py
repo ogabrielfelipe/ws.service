@@ -28,6 +28,7 @@ JSONIFY_PRETTYPRINT_REGULAR = False
 SECRET_KEY = chave
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
 JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
-JWT_TOKEN_LOCATION = ["headers"]
+JWT_TOKEN_LOCATION = ["headers", "cookies"]
+JWT_REFRESH_COOKIE_PATH = '/Auth/Refresh'
 JWT_COOKIE_SECURE = True # Em HTTPS deverá mudar para True
 
