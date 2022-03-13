@@ -7,8 +7,7 @@ from ..controller.SistemaController import (
     atualiza_sistema,
     delete_sistema
 )
-from datetime import datetime
-from datetime import timezone, timedelta
+import datetime
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,

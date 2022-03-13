@@ -14,10 +14,9 @@ def cadastra_competencia(usuario):
     ano = resp['ano']
     dataI = datetime.strptime(resp['dataI'], '%Y-%m-%d').date()
     dataF = datetime.strptime(resp['dataF'], '%Y-%m-%d').date()
-    usuario = usuario_username(usuario).id
     trava = bool(resp['trava'])
 
-    competencia = Competencia(comp=comp, ano=ano, dataI=dataI, dataF=dataF, trava=trava, usuario=usuario)
+    competencia = Competencia(comp=comp, ano=ano, dataI=dataI, dataF=dataF, trava=trava, usuario=usuario.id)
     if busca_competencia_por_usuario_comp_ano(comp=comp, ano=ano):
         try:
             db.session.add(competencia)

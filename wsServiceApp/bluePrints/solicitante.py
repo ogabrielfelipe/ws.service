@@ -7,8 +7,7 @@ from ..controller.SolicitanteController import (
     busca_solicitantes,
     delete_solicitante
 )
-from datetime import datetime
-from datetime import timezone, timedelta
+import datetime
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,

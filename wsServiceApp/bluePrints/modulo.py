@@ -7,8 +7,7 @@ from ..controller.ModuloController import (
     busca_modulos,
     delete_modulo
 )
-from datetime import datetime
-from datetime import timezone, timedelta
+import datetime
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,
