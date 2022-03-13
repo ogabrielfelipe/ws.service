@@ -78,6 +78,17 @@ def busca_competencias():
     return jsonify({'message': 'Competencia não encontrado', 'dados': {}})
 
 
+def busca_competencia_mes():
+    resp = request.get_json()
+    comp = resp['comp']
+    ano = resp['ano']
+    competencia = db.session.query(Competencia).filter(and_(Competencia.comp == comp, Competencia.ano == ano)).one()
+    if competencia:
+        result = competencia_schema.dump(competencia)
+        return jsonify({'msg': 'Busca Efetuada com sucesso', 'dados': result})
+    return jsonify({'msg': 'Não foi possível efetuar a busca', 'dados': {}})
+
+
 def busca_competencia(id):
     competencia = Competencia.query.get(id)
     if competencia:

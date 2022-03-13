@@ -1,3 +1,4 @@
+import datetime
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from ..controller.CompetenciaController import (
@@ -6,9 +7,9 @@ from ..controller.CompetenciaController import (
     busca_competencias,
     atualiza_competencia,
     altera_trava_competencia,
-    delete_competencia
+    delete_competencia,
+    busca_competencia_mes
 )
-from datetime import datetime
 from datetime import timezone, timedelta
 from flask_jwt_extended import (
     create_access_token,
@@ -104,6 +105,23 @@ def busc_competencias():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_competencias()
+    response.headers['token_access'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response
+
+
+@comp.route('/Competencia/BuscaCompetenciaMes', methods=['GET'])
+@jwt_required(locations=["headers"])
+def busc_mes_competencias():
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = busca_competencia_mes()
     response.headers['token_access'] = access_token
     response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
