@@ -16,11 +16,11 @@ def cadastra_usuario():
         db.session.add(user)
         db.session.commit()
         result = usuario_schema.dump(user)
-        return jsonify({'message': 'Usuário Cadastrado com sucesso', 'dado': result}), 201
+        return jsonify({'message': 'Usuário Cadastrado com sucesso', 'dado': result})
     except SQLAlchemyError as sa:
         db.session.rollback()
         return jsonify({'message': 'Usuário não Cadastrado', 'dado': {},
-                        'Error': json.dumps(sa)}), 201
+                        'Error': json.dumps(sa)})
 
 
 def usuario_username(username):
@@ -54,7 +54,7 @@ def atualiza_usuario(id):
 
     user = Usuario.query.get(id)
     if not user:
-        return jsonify({'message': 'Usuário não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Usuário não encontrado', 'dados': {}})
 
     try:
         user.username = username
@@ -63,36 +63,36 @@ def atualiza_usuario(id):
         user.acesso = acesso
         db.session.commit()
         result = usuario_schema.dumps(user)
-        return jsonify({'message': 'Usuário atualizado', 'dados': result}), 201
+        return jsonify({'message': 'Usuário atualizado', 'dados': result})
     except:
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
 
 
 def busca_usuarios():
     users = Usuario.query.all()
     if users:
         result = usuarios_schema.dump(users)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Usuários não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Usuários não encontrado', 'dados': {}})
 
 
 def busca_usuario(id):
     user = Usuario.query.get(id)
     if user:
         result = usuario_schema.dump(user)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Usuários não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Usuários não encontrado', 'dados': {}})
 
 def delete_usuario(id):
     user = Usuario.query.get(id)
     if not user:
-        return jsonify({'message': 'Usuário não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Usuário não encontrado', 'dados': {}})
 
     if user:
         try:
             db.session.delete(user)
             db.session.commit()
             result = usuario_schema.dump(user)
-            return jsonify({'message': 'Usuário excluido', 'dados': result}), 200
+            return jsonify({'message': 'Usuário excluido', 'dados': result})
         except:
-            return jsonify({'message': 'Não foi possível exvluir', 'dados': {}}), 500
+            return jsonify({'message': 'Não foi possível exvluir', 'dados': {}})

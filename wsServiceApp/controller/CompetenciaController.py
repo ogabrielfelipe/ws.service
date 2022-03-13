@@ -23,13 +23,13 @@ def cadastra_competencia(usuario):
             db.session.add(competencia)
             db.session.commit()
             result = competencia_schema.dump(competencia)
-            return jsonify({'message': 'Competencia com sucesso', 'dados': result}), 201
+            return jsonify({'message': 'Competencia com sucesso', 'dados': result})
         except SQLAlchemyError as sa:
             print(sa)
             db.session.rollback()
-            return jsonify({'message': 'Erro ao cadastrar', 'dados': {}}), 404
+            return jsonify({'message': 'Erro ao cadastrar', 'dados': {}})
     else:
-        return jsonify({'message': 'Já existe uma competencia criada', 'dados': {}}), 401
+        return jsonify({'message': 'Já existe uma competencia criada', 'dados': {}})
 
 # Alteração de competencia, somente no intervalo entre datas
 def atualiza_competencia(id):
@@ -39,17 +39,17 @@ def atualiza_competencia(id):
 
     competencia = Competencia.query.get(id)
     if not competencia:
-        return jsonify({'message': 'Modulo não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Modulo não encontrado', 'dados': {}})
 
     try:
         competencia.dataI = dataI
         competencia.dataF = dataF
         db.session.commit()
         result = competencia_schema.dump(competencia)
-        return jsonify({'message': 'Competência atualizado', 'dados': result}), 201
+        return jsonify({'message': 'Competência atualizado', 'dados': result})
     except:
         db.session.rollback()
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
 
 
 def altera_trava_competencia(id):
@@ -58,32 +58,32 @@ def altera_trava_competencia(id):
 
     competencia = Competencia.query.get(id)
     if not competencia:
-        return jsonify({'message': 'Modulo não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Modulo não encontrado', 'dados': {}})
 
     try:
         competencia.trava = trava
         db.session.commit()
         result = competencia_schema.dump(competencia)
-        return jsonify({'message': 'Competência atualizado', 'dados': result}), 201
+        return jsonify({'message': 'Competência atualizado', 'dados': result})
     except:
         db.session.rollback()
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
 
 
 def busca_competencias():
     competencia = Competencia.query.all()
     if competencia:
         result = competencias_schema.dump(competencia)
-        return jsonify({'message': 'Competencia', 'dados': result}), 200
-    return jsonify({'message': 'Competencia não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Competencia', 'dados': result})
+    return jsonify({'message': 'Competencia não encontrado', 'dados': {}})
 
 
 def busca_competencia(id):
     competencia = Competencia.query.get(id)
     if competencia:
         result = competencia_schema.dump(competencia)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Competencia não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Competencia não encontrado', 'dados': {}})
 
 
 def busca_competencia_por_atendimento(id):
@@ -106,18 +106,18 @@ def busca_competencia_por_usuario_comp_ano(comp, ano):
 def delete_competencia(id):
     competencia = Competencia.query.get(id)
     if not competencia:
-        return jsonify({'message': 'Competencia não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Competencia não encontrado', 'dados': {}})
 
     if busca_atendimento_por_competencia(competencia.id):
         try:
             db.session.delete(competencia)
             db.session.commit()
             result = competencia_schema.dump(competencia)
-            return jsonify({'message': 'Competencia excluido', 'dados': result}), 200
+            return jsonify({'message': 'Competencia excluido', 'dados': result})
         except:
-            return jsonify({'message': 'Não foi possível excluir', 'dados': {}}), 500
+            return jsonify({'message': 'Não foi possível excluir', 'dados': {}})
     else:
-        return jsonify({'message': 'Competencia já possui Atendimento Vinculado', 'dados': {}}), 401
+        return jsonify({'message': 'Competencia já possui Atendimento Vinculado', 'dados': {}})
 
 
 def busca_atendimento_por_competencia(idCompetencia):

@@ -1,5 +1,6 @@
 import datetime
 from sqlite3 import Date
+from urllib import response
 from flask import Blueprint, request, jsonify
 from ...controller.UsuarioController import autentica_usuario
 from jwt import decode
@@ -20,9 +21,15 @@ jwt = JWTManager()
 def login():
     resp = request.get_json()
     token = autentica_usuario(username=resp['username'], senha=resp['senha'])
+
     if token is None:
-        return jsonify({'message': 'Token não gerado', 'Token': {}}), 404
-    return jsonify({"msg": "login successful", 'token_access': token}), 200
+        response = jsonify({'msg': 'Token não gerado'})
+        response.headers['token_access'] = ''
+        return response, 404
+
+    response = jsonify({"msg": "login successful"})
+    response.headers['token_access'] = token
+    return response
 
 
 @aut.route("/Auth/Refresh", methods=["GET"])
@@ -35,7 +42,7 @@ def refresh():
     identity = get_jwt_identity()
 
     access_token = ''
-    if exp <= nbf+datetime.timedelta(minutes=50):
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     usuario = {
         "nome": identity['nome'],
@@ -43,4 +50,7 @@ def refresh():
         "acesso": identity['acesso'],
         "email": identity['email']
     }
-    return jsonify({"access_token": access_token, "usuario": usuario}), 200
+    response = jsonify({"access_token": access_token, "usuario": usuario})
+    response.headers['token_access'] = access_token
+
+    return response

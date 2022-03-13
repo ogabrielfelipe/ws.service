@@ -15,11 +15,11 @@ def cadastra_sistema():
         db.session.add(sistema)
         db.session.commit()
         result = sistema_schema.dump(sistema)
-        return jsonify({'message': 'Sistema com sucesso', 'dados': result}), 201
+        return jsonify({'message': 'Sistema com sucesso', 'dados': result})
     except SQLAlchemyError as sa:
         print(sa)
         db.session.rollback()
-        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}}), 404
+        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}})
 
 
 def atualiza_sistema(id):
@@ -29,44 +29,44 @@ def atualiza_sistema(id):
 
     sistema = Sistema.query.get(id)
     if not sistema:
-        return jsonify({'message': 'Sistema não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sistema não encontrado', 'dados': {}})
 
     try:
         sistema.nome = nome
         sistema.sigla = sigla
         db.session.commit()
         result = sistema_schema.dump(sistema)
-        return jsonify({'message': 'Solicitante atualizado', 'dados': result}), 201
+        return jsonify({'message': 'Solicitante atualizado', 'dados': result})
     except:
         db.session.rollback()
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
 
 def busca_sistemas():
     sistema = Sistema.query.all()
     if sistema:
         result = sistemas_schema.dump(sistema)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Usuários não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Usuários não encontrado', 'dados': {}})
 
 
 def busca_sistema(id):
     sistema = Sistema.query.get(id)
     if sistema:
         result = sistema_schema.dump(sistema)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Usuários não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Usuários não encontrado', 'dados': {}})
 
 
 def delete_sistema(id):
     sistema = Sistema.query.get(id)
     if not sistema:
-        return jsonify({'message': 'Sistema não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sistema não encontrado', 'dados': {}})
 
     if sistema:
         try:
             db.session.delete(sistema)
             db.session.commit()
             result = sistema_schema.dump(sistema)
-            return jsonify({'message': 'Sistema excluido', 'dados': result}), 200
+            return jsonify({'message': 'Sistema excluido', 'dados': result})
         except:
-            return jsonify({'message': 'Não foi possível excluir', 'dados': {}}), 500
+            return jsonify({'message': 'Não foi possível excluir', 'dados': {}})

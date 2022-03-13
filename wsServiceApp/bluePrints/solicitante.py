@@ -26,31 +26,78 @@ soli = Blueprint('soli', __name__)
 @soli.route('/Solicitante/Cadastrar', methods=['POST'])
 @jwt_required(locations=["headers"])
 def cad_solicitante():
-    current_user = get_jwt_identity()
-    print('Usuário: ', current_user)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
 
-    return cadastra_solicitante()
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = cadastra_solicitante()
+    response.headers['token_access'] = access_token
+    return response
 
 
 @soli.route('/Solicitante/Alterar/<codigo>', methods=['PATCH'])
 @jwt_required(locations=["headers"])
 def alter_solicitante(codigo):
-    return atualiza_cadastro(codigo)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = atualiza_cadastro(codigo)
+    response.headers['token_access'] = access_token
+    return response
 
 
 @soli.route('/Solicitante/BuscaSolicitante/<codigo>', methods=['GET'])
 @jwt_required(locations=["headers"])
 def busc_Solicitante(codigo):
-    return busca_solicitante(codigo)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = busca_solicitante(codigo)
+    response.headers['token_access'] = access_token
+    return response
 
 
 @soli.route('/Solicitante/BuscaSolicitantes', methods=['GET'])
 @jwt_required(locations=["headers"])
 def busc_Solicitantes():
-    return busca_solicitantes()
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = busca_solicitantes()
+    response.headers['token_access'] = access_token
+    return response
 
 
 @soli.route('/Solicitante/Excluir/<codigo>', methods=['DELETE'])
 @jwt_required(locations=["headers"])
 def exclui_solicitante(codigo):
-    return delete_solicitante(codigo)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = delete_solicitante(codigo)
+    response.headers['token_access'] = access_token
+    return response

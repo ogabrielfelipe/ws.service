@@ -11,9 +11,6 @@ config.read('CONFIGDB.ini')
 
 load_dotenv(".env")
 
-stringKey = string.ascii_letters + string.ascii_lowercase + string.ascii_uppercase
-chave = ''.join(random.choice(stringKey) for i in range(12))
-
 host = "db.bnrldhgbsuswrprchcij.supabase.co"
 db = "postgres"
 port = "5432"

@@ -24,22 +24,62 @@ user = Blueprint('user', __name__)
 @user.route('/Usuario/Cadastrar', methods=['POST'])
 @jwt_required(locations=["headers"])
 def cadastra_user():
-    return cadastra_usuario()
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = cadastra_usuario()
+    response.headers['token_access'] = access_token
+    return response
 
 
 @user.route('/Usuario/Atualiza/<codigo>', methods=['PATCH'])
 @jwt_required(locations=["headers"])
 def atualiza_user(codigo):
-    return atualiza_usuario(codigo)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = atualiza_usuario(codigo)
+    response.headers['token_access'] = access_token
+    return response
 
 
 @user.route('/Usuario/BuscaTodos', methods=['GET'])
 @jwt_required(locations=["headers"])
 def busca_todos():
-    return busca_usuarios()
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = busca_usuarios()
+    response.headers['token_access'] = access_token
+    return response
 
 
 @user.route('/Usuario/BuscaUsurio/<codigo>', methods=['GET'])
 @jwt_required(locations=["headers"])
 def busca_user(codigo):
-    return busca_usuario(codigo)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = busca_usuario(codigo)
+    response.headers['token_access'] = access_token
+    return response

@@ -16,11 +16,11 @@ def cadastra_modulo():
         db.session.add(modulo)
         db.session.commit()
         result = modulo_schema.dump(modulo)
-        return jsonify({'message': 'Modulo com sucesso', 'dados': result}), 201
+        return jsonify({'message': 'Modulo com sucesso', 'dados': result})
     except SQLAlchemyError as sa:
         print(sa)
         db.session.rollback()
-        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}}), 404
+        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}})
 
 
 def atualiza_modulo(id):
@@ -31,45 +31,45 @@ def atualiza_modulo(id):
 
     modulo = Modulo.query.get(id)
     if not modulo:
-        return jsonify({'message': 'Modulo não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Modulo não encontrado', 'dados': {}})
 
     try:
         modulo.nome = nome
         modulo.sigla = sigla
         db.session.commit()
         result = modulo_schema.dump(modulo)
-        return jsonify({'message': 'Setor atualizado', 'dados': result}), 201
+        return jsonify({'message': 'Setor atualizado', 'dados': result})
     except:
         db.session.rollback()
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
 
 
 def busca_modulos():
     modulo = Modulo.query.all()
     if modulo:
         result = modulos_schema.dump(modulo)
-        return jsonify({'message': 'Modulo', 'dados': result}), 200
-    return jsonify({'message': 'Modulo não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Modulo', 'dados': result})
+    return jsonify({'message': 'Modulo não encontrado', 'dados': {}})
 
 
 def busca_modulo(id):
     modulo = Modulo.query.get(id)
     if modulo:
         result = modulo_schema.dump(modulo)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Modulo não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Modulo não encontrado', 'dados': {}})
 
 
-def delete_setor(id):
+def delete_modulo(id):
     modulo = Modulo.query.get(id)
     if not modulo:
-        return jsonify({'message': 'Setor não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Setor não encontrado', 'dados': {}})
 
     if modulo:
         try:
             db.session.delete(modulo)
             db.session.commit()
             result = modulo_schema.dump(modulo)
-            return jsonify({'message': 'Modulo excluido', 'dados': result}), 200
+            return jsonify({'message': 'Modulo excluido', 'dados': result})
         except:
-            return jsonify({'message': 'Não foi possível excluir', 'dados': {}}), 500
+            return jsonify({'message': 'Não foi possível excluir', 'dados': {}})

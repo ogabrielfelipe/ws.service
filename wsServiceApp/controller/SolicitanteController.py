@@ -14,11 +14,11 @@ def cadastra_solicitante():
         db.session.add(solicitante)
         db.session.commit()
         result = solicitante_schema.dump(solicitante)
-        return jsonify({'message': 'Cadastrado com sucesso', 'dados': result}), 201
+        return jsonify({'message': 'Cadastrado com sucesso', 'dados': result})
     except SQLAlchemyError as sa:
         print(sa)
         db.session.rollback()
-        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}}), 404
+        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}})
 
 
 def atualiza_cadastro(id):
@@ -29,7 +29,7 @@ def atualiza_cadastro(id):
 
     solicitante = Solicitante.query.get(id)
     if not solicitante:
-        return jsonify({'message': 'Solicitante não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Solicitante não encontrado', 'dados': {}})
 
     try:
         solicitante.nome = nome
@@ -37,38 +37,38 @@ def atualiza_cadastro(id):
         solicitante.setor_id = setor
         db.session.commit()
         result = solicitante_schema.dump(solicitante)
-        return jsonify({'message': 'Solicitante atualizado', 'dados': result}), 201
+        return jsonify({'message': 'Solicitante atualizado', 'dados': result})
     except:
         db.session.rollback()
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
 
 
 def busca_solicitantes():
     users = Solicitante.query.all()
     if users:
         result = solicitantes_schema.dump(users)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Usuários não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Usuários não encontrado', 'dados': {}})
 
 
 def busca_solicitante(id):
     user = Solicitante.query.get(id)
     if user:
         result = solicitante_schema.dump(user)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Usuários não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Usuários não encontrado', 'dados': {}})
 
 
 def delete_solicitante(id):
     solicitante = Solicitante.query.get(id)
     if not solicitante:
-        return jsonify({'message': 'Solicitante não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Solicitante não encontrado', 'dados': {}})
 
     if solicitante:
         try:
             db.session.delete(solicitante)
             db.session.commit()
             result = solicitante_schema.dump(solicitante)
-            return jsonify({'message': 'Solicitante excluido', 'dados': result}), 200
+            return jsonify({'message': 'Solicitante excluido', 'dados': result})
         except:
-            return jsonify({'message': 'Não foi possível exvluir', 'dados': {}}), 500
+            return jsonify({'message': 'Não foi possível exvluir', 'dados': {}})

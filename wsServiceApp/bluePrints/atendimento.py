@@ -26,19 +26,52 @@ atend = Blueprint('atend', __name__)
 @atend.route('/Atendimento/Cadastrar', methods=['POST'])
 @jwt_required(locations=["headers"])
 def cad_atendimento():
-    return cadastra_atendimento(usuario=get_jwt_identity())
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = cadastra_atendimento(usuario=get_jwt_identity())
+    response.headers['token_access'] = access_token
+    return response
+
+
 
 
 @atend.route('/Atendimento/Alterar/<codigo>', methods=['PATCH'])
 @jwt_required(locations=["headers"])
 def alter_atendimento(codigo):
-    return atualiza_atendimento(codigo)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = atualiza_atendimento(codigo)
+    response.headers['token_access'] = access_token
+    return response
+
 
 
 @atend.route('/Atendimento/BuscaAtendimento/<codigo>', methods=['GET'])
 @jwt_required(locations=["headers"])
 def busc_atendimento(codigo):
-    return busca_atendimento(codigo)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = busca_atendimento(codigo)
+    response.headers['token_access'] = access_token
+    return response
 
 
 '''
@@ -48,10 +81,30 @@ def busc_atendimento(codigo):
 @atend.route('/Atendimento/BuscaAtendimentos', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_atendimentos():
-    return busca_atendimentos()
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = busca_atendimentos()
+    response.headers['token_access'] = access_token
+    return response
 
 
 @atend.route('/Atendimento/Excluir/<codigo>', methods=['DELETE'])
 @jwt_required(locations=["headers"])
 def excluir_atendimento(codigo):
-    return delete_atendimento(codigo)
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = delete_atendimento(codigo)
+    response.headers['token_access'] = access_token
+    return response

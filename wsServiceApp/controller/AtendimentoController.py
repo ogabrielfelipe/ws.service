@@ -29,15 +29,15 @@ def cadastra_atendimento(usuario):
                 db.session.add(atendimento)
                 db.session.commit()
                 result = atendimento_schema(atendimento)
-                return jsonify({'message': 'Atendimento com sucesso', 'dados': result}), 201
+                return jsonify({'message': 'Atendimento com sucesso', 'dados': result})
             except SQLAlchemyError as sa:
                 print(sa)
                 db.session.rollback()
-                return jsonify({'message': 'Erro ao cadastrar', 'dados': {}}), 404
+                return jsonify({'message': 'Erro ao cadastrar', 'dados': {}})
         else:
-            return jsonify({'message': 'Data de cadastro não compatível com a competência', 'dados': {}}), 401
+            return jsonify({'message': 'Data de cadastro não compatível com a competência', 'dados': {}})
     else:
-        return jsonify({'message': 'Competência Finalizada', 'dados': {}}), 401
+        return jsonify({'message': 'Competência Finalizada', 'dados': {}})
 
 
 
@@ -58,7 +58,7 @@ def atualiza_atendimento(id):
     compTrava = busca_competencia_por_atendimento(atendimento.competencia_id)
     if compTrava['trava']:
         if not atendimento:
-            return jsonify({'message': 'Atendimento não encontrado', 'dados': {}}), 404
+            return jsonify({'message': 'Atendimento não encontrado', 'dados': {}})
         try:
             atendimento.data = data
             atendimento.demanda = demanda
@@ -71,12 +71,12 @@ def atualiza_atendimento(id):
             atendimento.status = status
             db.session.commit()
             result = atendimento_schema.dump(atendimento)
-            return jsonify({'message': 'Atendimento atualizado', 'dados': result}), 201
+            return jsonify({'message': 'Atendimento atualizado', 'dados': result})
         except:
             db.session.rollback()
-            return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
+            return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
     else:
-        return jsonify({'message': 'Competencia Fechada', 'dados': {}}), 401
+        return jsonify({'message': 'Competencia Fechada', 'dados': {}})
 
 
 def busca_atendimentos():
@@ -89,21 +89,21 @@ def busca_atendimentos():
     if atendimento:
         result = atendimentos_schema.dump(atendimento)
         return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Atendimentos não encontrado', 'dados': {}}), 404
+    return jsonify({'message': 'Atendimentos não encontrado', 'dados': {}})
 
 
 def busca_atendimento(id):
     atendimento = Atendimento.query.get(id)
     if atendimento:
         result = atendimento_schema.dump(atendimento)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Atendimento não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result})
+    return jsonify({'message': 'Atendimento não encontrado', 'dados': {}})
 
 
 def delete_atendimento(id):
     atendimento = Atendimento.query.get(id)
     if not atendimento:
-        return jsonify({'message': 'Atendimento não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Atendimento não encontrado', 'dados': {}})
 
     compTrava = busca_competencia_por_atendimento(atendimento.competencia_id)
     if compTrava['trava']:
@@ -112,9 +112,9 @@ def delete_atendimento(id):
                 db.session.delete(atendimento)
                 db.session.commit()
                 result = atendimento_schema.dump(atendimento)
-                return jsonify({'message': 'Atendimento excluido', 'dados': result}), 200
+                return jsonify({'message': 'Atendimento excluido', 'dados': result})
             except:
-                return jsonify({'message': 'Não foi possível excluir', 'dados': {}}), 500
+                return jsonify({'message': 'Não foi possível excluir', 'dados': {}})
     else:
-        return jsonify({'message': 'Competência Fechada', 'dados': {}}), 401
+        return jsonify({'message': 'Competência Fechada', 'dados': {}})
 
