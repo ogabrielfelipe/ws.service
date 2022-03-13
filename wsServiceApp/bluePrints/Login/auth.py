@@ -28,7 +28,7 @@ def login():
         return response, 404
 
     response = jsonify({"msg": "login successful"})
-    response.headers['Authorization'] = token
+    response.headers['Access-Control-Expose-Headers'] = token
     return response
 
 
@@ -51,6 +51,6 @@ def refresh():
         "email": identity['email']
     }
     response = jsonify({"access_token": access_token, "usuario": usuario})
-    response.headers['Authorization'] = access_token
+    response.headers['Access-Control-Expose-Headers'] = access_token
 
     return response
