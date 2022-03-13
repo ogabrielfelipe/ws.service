@@ -51,6 +51,6 @@ def refresh():
         "email": identity['email']
     }
     response = jsonify({"access_token": access_token, "usuario": usuario})
-    response.headers['token_access'] = access_token
+    response.headers['Authorization'] = access_token
 
     return response
