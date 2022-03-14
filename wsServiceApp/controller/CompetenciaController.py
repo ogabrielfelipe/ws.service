@@ -5,7 +5,7 @@ from ..model.Atendimento import Atendimento, atendimento_schema, atendimentos_sc
 from ..controller.UsuarioController import usuario_username
 from flask import request, jsonify
 from datetime import datetime
-from sqlalchemy import and_
+from sqlalchemy import and_, text
 
 
 def cadastra_competencia(usuario):
@@ -87,6 +87,15 @@ def busca_competencia_mes():
         return jsonify({'msg': 'Busca Efetuada com sucesso', 'dados': result})
     return jsonify({'msg': 'Não foi possível efetuar a busca', 'dados': {}})
 
+
+def listar_competencias():
+    try:
+        sql_comp = text('SELECT c.comp, c.ano FROM competencia as c')
+        consultaCompetencia = db.session.execute(sql_comp).fetchall()
+        consultaCompetencia_dict = [dict(u) for u in consultaCompetencia]
+        return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaCompetencia_dict, 'error': ''})
+    except Exception as e:
+        return jsonify({'msg': 'Não foi possível fazer a busca', 'dados': {}, 'error': str(e)})
 
 def busca_competencia(id):
     competencia = Competencia.query.get(id)
