@@ -90,7 +90,7 @@ def busca_competencia_mes():
 
 def listar_competencias():
     try:
-        sql_comp = text('SELECT c.comp, c.ano FROM competencia as c')
+        sql_comp = text('SELECT c.id, c.comp, c.ano FROM competencia as c')
         consultaCompetencia = db.session.execute(sql_comp).fetchall()
         consultaCompetencia_dict = [dict(u) for u in consultaCompetencia]
         return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaCompetencia_dict, 'error': ''})
