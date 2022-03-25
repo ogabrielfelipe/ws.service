@@ -1,4 +1,5 @@
 from flask import Flask
+from pydantic import conset
 from .bluePrints.Login.auth import aut
 from .model.Usuario import db, ma, Usuario
 from .bluePrints.Login.auth import jwt
@@ -58,11 +59,13 @@ def my_on_connect(dbapi_con, connection_record):
 
 with app.app_context():
     db.create_all()
-    user = Usuario('master', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br')
-    try:
-        db.session.add(user)
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        print(e)
+    users_exist = Usuario.query.all()
+    if not users_exist:
+        user = Usuario('master', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br')
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print(e)
 
