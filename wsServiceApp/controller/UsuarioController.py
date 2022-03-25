@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def cadastra_usuario():
     resp = request.get_json()
     senha = generate_password_hash(resp['senha'])
-    user = Usuario(username=resp['username'], nome=resp['nome'], acesso=resp['acesso'], senha=senha)
+    user = Usuario(username=resp['username'], email=resp['email'],nome=resp['nome'], acesso=resp['acesso'], senha=senha)
 
     try:
         db.session.add(user)
