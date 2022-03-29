@@ -15,11 +15,11 @@ def cadastra_cliente():
         db.session.add(cliente)
         db.session.commit()
         result = cliente_schema.dump(cliente)
-        return jsonify({'message': 'Cliente com sucesso', 'dados': result})
-    except SQLAlchemyError as sa:
-        print(sa)
+        return jsonify({'message': 'Cliente com sucesso', 'dados': result}), 200
+    except Exception as e:
+        print(e)
         db.session.rollback()
-        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}})
+        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}, 'error': str(e)}), 500
 
 
 def atualiza_cliente(id):
