@@ -57,7 +57,7 @@ def busc_cliente(codigo):
     return response
 
 
-@client.route('/Cliente/BuscaClientes', methods=['POST'])
+@client.route('/Cliente/BuscaClientes', methods=['GET'])
 @jwt_required(locations=["headers"])
 def busc_clientes():    
     token_client = get_jwt()
@@ -69,6 +69,7 @@ def busc_clientes():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_clientes()
+    response[0].headers['Access-Control-Allow-Origin'] = '*'
     response[0].headers['token_access'] = access_token
     response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
 
