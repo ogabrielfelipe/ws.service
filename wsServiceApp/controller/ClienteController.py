@@ -52,7 +52,6 @@ def busca_clientes():
         sql_clientes = text(f"SELECT * FROM CLIENTE {convert_dict_search}")
         consultaClientes = db.session.execute(sql_clientes).fetchall()
         consultaClientes_dict = [dict(u) for u in consultaClientes]
-        print(consultaClientes_dict)
         return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaClientes_dict, 'error': ''}), 200
     except Exception as e:
         db.session.rollback()
