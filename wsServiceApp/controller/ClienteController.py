@@ -1,7 +1,9 @@
 from sqlalchemy.exc import SQLAlchemyError
 from ..model.Cliente import Cliente, cliente_schema, clientes_schema
 from ..model.Usuario import db
+from .util import convert_pesquisa_consulta
 from flask import request, jsonify
+from sqlalchemy import text
 
 
 def cadastra_cliente():
@@ -15,11 +17,11 @@ def cadastra_cliente():
         db.session.add(cliente)
         db.session.commit()
         result = cliente_schema.dump(cliente)
-        return jsonify({'message': 'Cliente com sucesso', 'dados': result})
-    except SQLAlchemyError as sa:
-        print(sa)
+        return jsonify({'message': 'Cliente com sucesso', 'dados': result}), 201
+    except Exception as e:
+        print(e)
         db.session.rollback()
-        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}})
+        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}, 'error': str(e)}), 500
 
 
 def atualiza_cliente(id):
@@ -43,12 +45,17 @@ def atualiza_cliente(id):
 
 
 def busca_clientes():
-    cliente = Cliente.query.all()
-    if cliente:
-        result = clientes_schema.dump(cliente)
-        return jsonify({'message': 'Cliente', 'dados': result})
-    return jsonify({'message': 'Cliente não encontrado', 'dados': {}})
-
+    resp = request.get_json()
+    convert_dict_search = convert_pesquisa_consulta(resp)
+    try:
+        sql_clientes = text(f"SELECT * FROM CLIENTE {convert_dict_search}")
+        consultaClientes = db.session.execute(sql_clientes).fetchall()
+        consultaClientes_dict = [dict(u) for u in consultaClientes]
+        return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaClientes_dict, 'error': ''}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'msg': 'Nao foi efetuado a busca com sucesso', 'dados': {}, 'error': str(e)}), 500
+    
 
 def busca_cliente(id):
     cliente = Cliente.query.get(id)

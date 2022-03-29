@@ -35,9 +35,9 @@ def cad_cliente():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_cliente()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1] 
 
 
 @client.route('/Cliente/BuscaCliente/<codigo>', methods=['GET'])
