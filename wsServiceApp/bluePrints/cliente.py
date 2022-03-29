@@ -57,7 +57,7 @@ def busc_cliente(codigo):
     return response
 
 
-@client.route('/Cliente/BuscaClientes', methods=['GET'])
+@client.route('/Cliente/BuscaClientes', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_clientes():    
     token_client = get_jwt()
