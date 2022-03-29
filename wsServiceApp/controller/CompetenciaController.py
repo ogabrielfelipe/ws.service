@@ -28,7 +28,7 @@ def cadastra_competencia(usuario):
             db.session.rollback()
             return jsonify({'message': 'Erro ao cadastrar', 'dados': {}})
     else:
-        return jsonify({'message': 'Já existe uma competencia criada', 'dados': {}})
+        return jsonify({'message': 'Já existe uma competencia criada', 'dados': {}}), 401
 
 # Alteração de competencia, somente no intervalo entre datas
 def atualiza_competencia(id):
