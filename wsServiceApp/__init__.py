@@ -3,9 +3,8 @@ from pydantic import conset
 from .bluePrints.Login.auth import aut
 from .model.Usuario import db, ma, Usuario
 from .bluePrints.Login.auth import jwt
-from sqlalchemy.event import listens_for
-from sqlalchemy.engine import Engine
-from sqlite3 import Connection as SQLite3Connection
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import text
 from werkzeug.security import generate_password_hash
 from wsServiceApp.bluePrints import (
     usuario,
@@ -49,16 +48,18 @@ jwt.init_app(app)
 CORS(app)
 
 
-@listens_for(Engine, "connect")
-def my_on_connect(dbapi_con, connection_record):
-    if isinstance(dbapi_con, SQLite3Connection):
-        cursor = dbapi_con.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON;")
-        cursor.close()
-
-
 with app.app_context():
     db.create_all()
+
+    try:
+        extensao = db.session.execute(text("SELECT * FROM pg_available_extensions WHERE name = 'unaccent'")).one()
+    except SQLAlchemyError as e:
+        try:
+            db.session.execute('CREATE EXTENSION UNACCENT;')
+        except SQLAlchemyError as e:
+            print(e)
+        print(e)
+
     users_exist = Usuario.query.all()
     if not users_exist:
         user = Usuario('master', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br')

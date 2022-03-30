@@ -10,10 +10,10 @@ def convert_pesquisa_consulta(dict):
                 operador = valor[i]
                 if valor[i-1] == 'OR':
                     operador_sql_or = valor[i-1]
-                    cons_sql.append("{}  {} {} '{}'".format(operador_sql_or, atributo, operador, valor[i+1].replace('_', valor[i+2])))
+                    cons_sql.append("{}  UNACCENT(UPPER({})) {} UNACCENT(UPPER('{}'))".format(operador_sql_or, atributo, operador, valor[i+1].replace('_', valor[i+2])))
                 if valor[i-1] == 'AND':
                     operador_sql_and = valor[i-1]
-                    cons_sql.append("{} {} {} '{}'".format(operador_sql_and, atributo, operador, valor[i+1].replace('_', valor[i+2])))
+                    cons_sql.append("{} UNACCENT(UPPER({})) {} UNACCENT(UPPER('{}'))".format(operador_sql_and, atributo, operador, valor[i+1].replace('_', valor[i+2])))
             
             elif valor[i] == 'BETWEEN':
                 operador = valor[i]
