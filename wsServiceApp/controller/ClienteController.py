@@ -47,8 +47,9 @@ def atualiza_cliente(id):
 def busca_clientes():
     resp = request.get_json()
     print(resp)
+    print(resp['id'][2])
     entry = {
-        "id": int(resp['id']),
+        "id": int(resp['id'][2]),
         "nome": resp['nome'],
         "sigla": resp['sigla']
     }
