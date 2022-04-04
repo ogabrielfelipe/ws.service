@@ -31,17 +31,17 @@ def atualiza_cliente(id):
 
     cliente = Cliente.query.get(id)
     if not cliente:
-        return jsonify({'message': 'Cliente não encontrado', 'dados': {}})
+        return jsonify({'message': 'Cliente não encontrado', 'dados': {}}), 404
 
     try:
         cliente.nome = nome
         cliente.sigla = sigla
         db.session.commit()
         result = cliente_schema.dump(cliente)
-        return jsonify({'message': 'Cliente atualizado', 'dados': result})
+        return jsonify({'message': 'Cliente atualizado', 'dados': result}), 200
     except:
         db.session.rollback()
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
 
 
 def busca_clientes():
@@ -62,8 +62,8 @@ def busca_cliente(id):
     cliente = Cliente.query.get(id)
     if cliente:
         result = cliente_schema.dump(cliente)
-        return jsonify({'message': 'Sucesso', 'dados': result})
-    return jsonify({'message': 'Cliente não encontrado', 'dados': {}})
+        return jsonify({'message': 'Sucesso', 'dados': result}), 200
+    return jsonify({'message': 'Cliente não encontrado', 'dados': {}}), 500
 
 
 def delete_cliente(id):
@@ -76,6 +76,6 @@ def delete_cliente(id):
             db.session.delete(cliente)
             db.session.commit()
             result = cliente_schema.dump(cliente)
-            return jsonify({'message': 'Cliente excluido', 'dados': result})
+            return jsonify({'message': 'Cliente excluido', 'dados': result}), 200
         except:
-            return jsonify({'message': 'Não foi possível excluir', 'dados': {}})
+            return jsonify({'message': 'Não foi possível excluir', 'dados': {}}), 500

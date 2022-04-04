@@ -53,9 +53,9 @@ def busc_cliente(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_cliente(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @client.route('/Cliente/BuscaClientes', methods=['POST'])
@@ -88,9 +88,9 @@ def alter_cliente(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_cliente(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1] 
 
 
 @client.route('/Cliente/Excluir/<codigo>', methods=['DELETE'])
