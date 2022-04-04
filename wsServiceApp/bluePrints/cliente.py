@@ -18,10 +18,11 @@ from flask_jwt_extended import (
     set_access_cookies,
     unset_jwt_cookies
 )
-
+from flask_cors import CORS
 
 client = Blueprint('client', __name__)
 
+CORS(client)
 
 @client.route('/Cliente/Cadastrar', methods=['POST'])
 @jwt_required(locations=["headers"])
