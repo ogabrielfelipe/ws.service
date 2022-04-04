@@ -49,7 +49,7 @@ def busca_clientes():
     convert_dict_search = convert_pesquisa_consulta(resp)
     print('Consulta convertida: '+convert_dict_search)
     try:
-        sql_clientes = text(f"SELECT * FROM CLIENTE {convert_dict_search}")
+        sql_clientes = text(f"SELECT * FROM CLIENTE {convert_dict_search} ORDER BY id")
         consultaClientes = db.session.execute(sql_clientes).fetchall()
         consultaClientes_dict = [dict(u) for u in consultaClientes]
         return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaClientes_dict, 'error': ''}), 200

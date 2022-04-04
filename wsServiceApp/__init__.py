@@ -27,7 +27,8 @@ from .model import (
     Atendimento
 )
 from flask_cors import CORS
-
+from flask_alchemydumps import AlchemyDumps
+alchemydumps = AlchemyDumps()
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -45,7 +46,10 @@ app.register_blueprint(atendimento.atend)
 db.init_app(app)
 ma.init_app(app)
 jwt.init_app(app)
+alchemydumps = AlchemyDumps(app, db)
 CORS(app)
+
+
 
 
 with app.app_context():
