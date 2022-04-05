@@ -44,7 +44,6 @@ def atualiza_setor(id):
         result = setor_schema.dump(setor)
         return jsonify({'message': 'Setor atualizado', 'dados': result, 'error': ''}), 200
     except Exception as e:
-        print(e)
         db.session.rollback()
         return jsonify({'message': 'Não foi possível atualizar', 'dados': {}, 'error': str(e)}), 500
 
@@ -54,7 +53,7 @@ def busca_setores():
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_setores = text(f"""
-            SELECT setor.id as id_setor, setor.nome as nome_setor, setor.cliente_id, cliente.sigla as sigla_cliente, 
+            SELECT setor.id as id_setor, setor.nome as nome_setor, setor.cliente_id, cliente.sigla as sigla_cliente,
                 cliente.nome as nome_cliente FROM SETOR as setor
             INNER JOIN CLIENTE as cliente on cliente.id = setor.cliente_id
             {convert_dict_search}
