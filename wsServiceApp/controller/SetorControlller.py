@@ -39,6 +39,7 @@ def atualiza_setor(id):
         result = setor_schema.dump(setor)
         return jsonify({'message': 'Setor atualizado', 'dados': result, 'error': ''}), 200
     except Exception as e:
+        print(e)
         db.session.rollback()
         return jsonify({'message': 'Não foi possível atualizar', 'dados': {}, 'error': str(e)}), 500
 
