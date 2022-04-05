@@ -48,10 +48,11 @@ def busca_setores():
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_setores = text(f"""
-            SELECT setor.id as id_setor, setor.nome as nome_setor, setor.cliente_id, c.sigla as sigla_cliente, c.nome as nome_cliente FROM SETOR as setor
-            INNER JOIN cliente as c on c.id = setor.cliente_id            
-            {convert_dict_search} 
-            ORDER BY s.id                      
+            SELECT setor.id as id_setor, setor.nome as nome_setor, setor.cliente_id, cliente.sigla as sigla_cliente, 
+                cliente.nome as nome_cliente FROM SETOR as setor
+            INNER JOIN CLIENTE as cliente on cliente.id = setor.cliente_id
+            {convert_dict_search}
+            ORDER BY setor.id                     
              """)
         consultaSetores = db.session.execute(sql_setores).fetchall()
         consultaSetores_dict = [dict(u) for u in consultaSetores]
