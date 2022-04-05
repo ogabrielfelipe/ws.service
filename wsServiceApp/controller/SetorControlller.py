@@ -1,4 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
+
+from wsServiceApp.model.Cliente import Cliente
 from ..model.Setor import Setor, setor_schema, setores_schema
 from ..model.Usuario import db
 from flask import request, jsonify
@@ -26,12 +28,15 @@ def cadastra_setor():
 def atualiza_setor(id):
     resp = request.get_json()
     nome = resp['nome']
-    cliente = resp['cliente']
+    cliente_id = resp['cliente']
 
     setor = Setor.query.get(id)
     if not setor:
         return jsonify({'message': 'Setor não encontrado', 'dados': {}, 'error': ''}), 404
 
+    cliente = Cliente.query.get(cliente_id)
+    if not cliente:
+        return jsonify({'message': 'Cliente não encontrado', 'dados': {}, 'error': ''}), 404
     try:
         setor.nome = nome
         setor.cliente = cliente
