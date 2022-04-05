@@ -40,7 +40,7 @@ def cad_setor():
     return response[0], response[1]
 
 
-@setor.route('/Setor/Atualizar/<int:codigo>', methods=['PATCH'])
+@setor.route('/Setor/Alterar/<int:codigo>', methods=['PATCH'])
 @jwt_required(locations=["headers"])
 def alter_setor(codigo):
     token_client = get_jwt()
