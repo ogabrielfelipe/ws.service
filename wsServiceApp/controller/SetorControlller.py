@@ -17,11 +17,10 @@ def cadastra_setor():
         db.session.add(setor)
         db.session.commit()
         result = setor_schema.dump(setor)
-        return jsonify({'message': 'Setor com sucesso', 'dados': result}), 201
-    except SQLAlchemyError as sa:
-        print(sa)
+        return jsonify({'message': 'Setor com sucesso', 'dados': result, 'error': ''}), 201
+    except Exception as e:
         db.session.rollback()
-        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}}), 500
+        return jsonify({'message': 'Erro ao cadastrar', 'dados': {}, 'error': str(e)}), 500
 
 
 def atualiza_setor(id):
@@ -31,17 +30,17 @@ def atualiza_setor(id):
 
     setor = Setor.query.get(id)
     if not setor:
-        return jsonify({'message': 'Setor não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Setor não encontrado', 'dados': {}}, 'error': ''), 404
 
     try:
         setor.nome = nome
         setor.cliente = cliente
         db.session.commit()
         result = setor_schema.dump(setor)
-        return jsonify({'message': 'Setor atualizado', 'dados': result}), 200
-    except:
+        return jsonify({'message': 'Setor atualizado', 'dados': result, 'error': ''}), 200
+    except Exception as e:
         db.session.rollback()
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}}), 500
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}, 'error': str(e)}), 500
 
 
 def busca_setores():
@@ -59,26 +58,26 @@ def busca_setores():
     except Exception as e:
         db.session.rollback()
         return jsonify({'msg': 'Nao foi efetuado a busca com sucesso', 'dados': {}, 'error': str(e)}), 500
-        
+
 
 def busca_setor(id):
     setor = Setor.query.get(id)
     if setor:
         result = setor_schema.dump(setor)
-        return jsonify({'message': 'Sucesso', 'dados': result}), 200
-    return jsonify({'message': 'Setor não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Sucesso', 'dados': result, 'error': ''}), 200
+    return jsonify({'message': 'Setor não encontrado', 'dados': {}, 'error': ''}), 404
 
 
 def delete_setor(id):
     setor = Setor.query.get(id)
     if not setor:
-        return jsonify({'message': 'Setor não encontrado', 'dados': {}}), 404
+        return jsonify({'message': 'Setor não encontrado', 'dados': {}, 'error': ''}), 404
 
     if setor:
         try:
             db.session.delete(setor)
             db.session.commit()
             result = setor_schema.dump(setor)
-            return jsonify({'message': 'Setor excluido', 'dados': result}), 200
-        except:
-            return jsonify({'message': 'Não foi possível excluir', 'dados': {}}), 500
+            return jsonify({'message': 'Setor excluido', 'dados': result, 'error': ''}), 200
+        except Exception as e:
+            return jsonify({'message': 'Não foi possível excluir', 'dados': {}, 'error': str(e)}), 500
