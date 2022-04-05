@@ -30,7 +30,7 @@ def atualiza_setor(id):
 
     setor = Setor.query.get(id)
     if not setor:
-        return jsonify({'message': 'Setor não encontrado', 'dados': {}}, 'error': ''), 404
+        return jsonify({'message': 'Setor não encontrado', 'dados': {}, 'error': ''}), 404
 
     try:
         setor.nome = nome
