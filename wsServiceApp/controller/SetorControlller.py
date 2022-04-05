@@ -48,10 +48,11 @@ def busca_setores():
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_setores = text(f"""
-            SELECT s.id as id_setor, s.nome as nome_setor, s.cliente_id, c.sigla as sigla_cliente, c.nome as nome_cliente FROM SETOR as s
-            INNER JOIN cliente c on c.id = s.cliente_id
-            {convert_dict_search}            
-            ORDER BY s.id """)
+            SELECT setor.id as id_setor, setor.nome as nome_setor, setor.cliente_id, c.sigla as sigla_cliente, c.nome as nome_cliente FROM SETOR as setor
+            INNER JOIN cliente as c on c.id = setor.cliente_id            
+            {convert_dict_search} 
+            ORDER BY s.id                      
+             """)
         consultaSetores = db.session.execute(sql_setores).fetchall()
         consultaSetores_dict = [dict(u) for u in consultaSetores]
         return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaSetores_dict, 'error': ''}), 200
