@@ -17,9 +17,13 @@ from flask_jwt_extended import (
     set_access_cookies,
     unset_jwt_cookies
 )
+from flask_cors import CORS
 
 
 soli = Blueprint('soli', __name__)
+
+
+CORS(soli)
 
 
 @soli.route('/Solicitante/Cadastrar', methods=['POST'])
@@ -34,9 +38,9 @@ def cad_solicitante():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_solicitante()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @soli.route('/Solicitante/Alterar/<codigo>', methods=['PATCH'])
@@ -51,9 +55,9 @@ def alter_solicitante(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_cadastro(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @soli.route('/Solicitante/BuscaSolicitante/<codigo>', methods=['GET'])
@@ -68,12 +72,12 @@ def busc_Solicitante(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_solicitante(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@soli.route('/Solicitante/BuscaSolicitantes', methods=['GET'])
+@soli.route('/Solicitante/BuscaSolicitantes', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_Solicitantes():
     token_client = get_jwt()
@@ -85,9 +89,9 @@ def busc_Solicitantes():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_solicitantes()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1] 
 
 
 @soli.route('/Solicitante/Excluir/<codigo>', methods=['DELETE'])
@@ -102,6 +106,6 @@ def exclui_solicitante(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_solicitante(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]

@@ -19,9 +19,12 @@ from flask_jwt_extended import (
 )
 from flask_cors import CORS
 
+
 setor = Blueprint('setor', __name__)
 
+
 CORS(setor)
+
 
 @setor.route('/Setor/Cadastrar', methods=['POST'])
 @jwt_required(locations=["headers"])
