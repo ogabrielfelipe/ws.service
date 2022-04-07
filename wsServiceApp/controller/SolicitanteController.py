@@ -33,15 +33,10 @@ def atualiza_cadastro(id):
     if not solicitante:
         return jsonify({'message': 'Solicitante não encontrado', 'dados': {}}), 404
 
-    setor = Setor.query.get(setor_id)
-    if not setor:
-        return jsonify({'message': 'Setor não encontrado', 'dados': {}, 'error': ''}), 404
-
-
     try:
         solicitante.nome = nome
         solicitante.email = email
-        solicitante.setor_id = setor
+        solicitante.setor_id = setor_id
         db.session.commit()
         result = solicitante_schema.dump(solicitante)
         return jsonify({'message': 'Solicitante atualizado', 'dados': result, 'error': ''}), 200
