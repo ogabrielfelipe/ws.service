@@ -17,8 +17,13 @@ from flask_jwt_extended import (
     set_access_cookies,
     unset_jwt_cookies
 )
+from flask_cors import CORS
+
 
 sist = Blueprint('sist', __name__)
+
+
+CORS(sist)
 
 
 @sist.route('/Sistema/Cadastrar', methods=['POST'])
@@ -33,9 +38,9 @@ def cad_sistema():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_sistema()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @sist.route('/Sistema/Alterar/<codigo>', methods=['PATCH'])
@@ -50,12 +55,12 @@ def alter_sistema(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_sistema(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@sist.route('/Sistema/BuscaSistema/<codigo>', methods=['GET'])
+@sist.route('/Sistema/BuscaSistema/<codigo>', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_sistema(codigo):
     token_client = get_jwt()
@@ -67,12 +72,12 @@ def busc_sistema(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_sistema(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@sist.route('/Sistema/BuscaSistemas', methods=['GET'])
+@sist.route('/Sistema/BuscaSistemas', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_sistemas():
     token_client = get_jwt()
@@ -84,9 +89,9 @@ def busc_sistemas():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_sistemas()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @sist.route('/Sistema/Excluir/<codigo>', methods=['DELETE'])
@@ -101,6 +106,6 @@ def excluir_sistema(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_sistema(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
