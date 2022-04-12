@@ -1,4 +1,3 @@
-import json
 from ..model.Usuario import db
 from flask import request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
@@ -92,15 +91,22 @@ def atualiza_senha_usuario(id):
     usuario = Usuario.query.get(id)
     if usuario:
         resp = request.get_json()
-        senha = resp['senha']
-        try:
-            usuario.senha=senha
-            db.session.commit()
-            result = usuario_schema.dump(usuario)
-            return jsonify({'msg': 'Senha do usuario alterada com sucesso', 'dados': result, 'error': ''}), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'msg': 'Nao foi possivel alterar a senha', 'dados': '', 'error': str(e)}), 500
+        senhaAtual = resp['senhaAtual']
+        senhaNova = resp['senhaNova']
+        if usuario.senha == senhaAtual:
+            try:
+                usuario.senha=senhaNova
+                db.session.commit()
+                result = usuario_schema.dump(usuario)
+                return jsonify({'msg': 'Senha do usuario alterada com sucesso', 'dados': result, 'error': ''}), 200
+            except Exception as e:
+                db.session.rollback()
+                return jsonify({'msg': 'Nao foi possivel alterar a senha', 'dados': '', 'error': str(e)}), 500
+        else:
+            return jsonify({'msg': 'Senha atual nao confere com a que esta salva no banco', 'dados': {}, 'error': ''}), 401
+    else:
+        return jsonify({'msg': 'Usuario nao encontrado', 'dados': {}, 'error': ''}), 404
+
 
 def busca_usuario(id):
     user = Usuario.query.get(id)
