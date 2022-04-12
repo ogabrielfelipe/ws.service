@@ -5,6 +5,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask_jwt_extended import create_access_token, create_refresh_token
 from ..model.Usuario import Usuario, usuario_schema, usuarios_schema
 from werkzeug.security import generate_password_hash, check_password_hash
+from .util import convert_pesquisa_consulta
+from sqlalchemy import text
 
 
 def cadastra_usuario():
@@ -16,11 +18,11 @@ def cadastra_usuario():
         db.session.add(user)
         db.session.commit()
         result = usuario_schema.dump(user)
-        return jsonify({'message': 'Usuário Cadastrado com sucesso', 'dado': result})
-    except SQLAlchemyError as sa:
+        return jsonify({'message': 'Usuário Cadastrado com sucesso', 'dado': result, 'error': ''}), 201
+    except Exception as e:
         db.session.rollback()
         return jsonify({'message': 'Usuário não Cadastrado', 'dado': {},
-                        'Error': json.dumps(sa)})
+                        'error': str(e)}), 500
 
 
 def usuario_username(username):
@@ -54,7 +56,7 @@ def atualiza_usuario(id):
 
     user = Usuario.query.get(id)
     if not user:
-        return jsonify({'message': 'Usuário não encontrado', 'dados': {}})
+        return jsonify({'message': 'Usuário não encontrado', 'dados': {}, 'error': ''}), 404
 
     try:
         user.username = username
@@ -63,36 +65,61 @@ def atualiza_usuario(id):
         user.acesso = acesso
         db.session.commit()
         result = usuario_schema.dumps(user)
-        return jsonify({'message': 'Usuário atualizado', 'dados': result})
-    except:
-        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}})
+        return jsonify({'message': 'Usuário atualizado', 'dados': result, 'error': ''}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'Não foi possível atualizar', 'dados': {}, 'error': str(e)}), 500
 
 
 def busca_usuarios():
-    users = Usuario.query.all()
-    if users:
-        result = usuarios_schema.dump(users)
-        return jsonify({'message': 'Sucesso', 'dados': result})
-    return jsonify({'message': 'Usuários não encontrado', 'dados': {}})
+    resp = request.get_json()    
+    convert_dict_search = convert_pesquisa_consulta(resp)
+    try:
+        sql_usuarios = text(f"""
+            SELECT usuario.id, usuario.username, usuario.nome, usuario.email, usuario.acesso FROM USUARIO AS usuario
+            {convert_dict_search}
+            ORDER BY usuario.id
+             """)
+        consultaUsuarios = db.session.execute(sql_usuarios).fetchall()
+        consultaUsuarios_dict = [dict(u) for u in consultaUsuarios]
+        return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaUsuarios_dict, 'error': ''}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'msg': 'Nao foi efetuado a busca com sucesso', 'dados': {}, 'error': str(e)}), 500
 
+
+def atualiza_senha_usuario(id):
+    usuario = Usuario.query.get(id)
+    if usuario:
+        resp = request.get_json()
+        senha = resp['senha']
+        try:
+            usuario.senha=senha
+            db.session.commit()
+            result = usuario_schema.dump(usuario)
+            return jsonify({'msg': 'Senha do usuario alterada com sucesso', 'dados': result, 'error': ''}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'msg': 'Nao foi possivel alterar a senha', 'dados': '', 'error': str(e)}), 500
 
 def busca_usuario(id):
     user = Usuario.query.get(id)
     if user:
         result = usuario_schema.dump(user)
-        return jsonify({'message': 'Sucesso', 'dados': result})
-    return jsonify({'message': 'Usuários não encontrado', 'dados': {}})
+        return jsonify({'message': 'Sucesso', 'dados': result, 'error': ''}), 200
+    return jsonify({'message': 'Usuários não encontrado', 'dados': {}, 'error': ''}), 404
+
 
 def delete_usuario(id):
     user = Usuario.query.get(id)
     if not user:
-        return jsonify({'message': 'Usuário não encontrado', 'dados': {}})
+        return jsonify({'message': 'Usuário não encontrado', 'dados': {}, 'error': ''}), 404
 
     if user:
         try:
             db.session.delete(user)
             db.session.commit()
             result = usuario_schema.dump(user)
-            return jsonify({'message': 'Usuário excluido', 'dados': result})
-        except:
-            return jsonify({'message': 'Não foi possível exvluir', 'dados': {}})
+            return jsonify({'message': 'Usuário excluido', 'dados': result, 'error': ''}), 200
+        except Exception as e:
+            return jsonify({'message': 'Não foi possível exvluir', 'dados': {}, 'error': str(e)}), 500

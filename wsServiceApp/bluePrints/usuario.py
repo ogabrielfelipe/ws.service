@@ -3,7 +3,8 @@ from wsServiceApp.controller.UsuarioController import (
     cadastra_usuario,
     atualiza_usuario,
     busca_usuarios,
-    busca_usuario
+    busca_usuario,
+    atualiza_senha_usuario
 )
 import datetime
 from flask_jwt_extended import (
@@ -15,9 +16,13 @@ from flask_jwt_extended import (
     set_access_cookies,
     unset_jwt_cookies
 )
+from flask_cors import CORS
 
 
 user = Blueprint('user', __name__)
+
+
+CORS(user)
 
 
 @user.route('/Usuario/Cadastrar', methods=['POST'])
@@ -32,12 +37,12 @@ def cadastra_user():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_usuario()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1] 
 
 
-@user.route('/Usuario/Atualiza/<codigo>', methods=['PATCH'])
+@user.route('/Usuario/Atualiza/<int:codigo>', methods=['PATCH'])
 @jwt_required(locations=["headers"])
 def atualiza_user(codigo):
     token_client = get_jwt()
@@ -49,12 +54,12 @@ def atualiza_user(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_usuario(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@user.route('/Usuario/BuscaTodos', methods=['GET'])
+@user.route('/Usuario/BuscaTodos', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busca_todos():
     token_client = get_jwt()
@@ -66,12 +71,12 @@ def busca_todos():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_usuarios()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@user.route('/Usuario/BuscaUsurio/<codigo>', methods=['GET'])
+@user.route('/Usuario/BuscaUsurio/<int:codigo>', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busca_user(codigo):
     token_client = get_jwt()
@@ -83,6 +88,23 @@ def busca_user(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_usuario(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
+
+
+@user.route('/Usuario/AlteraSenha/<int:codigo>', methods=['PATCH'])
+@jwt_required(locations=["headers"])
+def alter_senha_usuario(codigo):
+    token_client = get_jwt()
+    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+    
+    identity = get_jwt_identity()
+
+    access_token = ''
+    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+        access_token = create_access_token(identity=identity, fresh=True)
+    response = atualiza_senha_usuario(codigo)
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
