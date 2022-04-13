@@ -61,7 +61,7 @@ with app.app_context():
 
     users_exist = Usuario.query.all()
     if not users_exist:
-        user = Usuario('master', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br')
+        user = Usuario('master', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br', 1)
         try:
             db.session.add(user)
             db.session.commit()

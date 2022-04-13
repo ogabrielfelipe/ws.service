@@ -12,7 +12,7 @@ from sqlalchemy import text
 def cadastra_usuario():
     resp = request.get_json()
     senha = generate_password_hash(resp['senha'])
-    user = Usuario(username=resp['username'], email=resp['email'],nome=resp['nome'], acesso=resp['acesso'], senha=senha)
+    user = Usuario(username=resp['username'], email=resp['email'],nome=resp['nome'], acesso=resp['acesso'], senha=senha, ativo=resp['ativo'])
 
     try:
         db.session.add(user)
@@ -74,7 +74,7 @@ def busca_usuarios():
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_usuarios = text(f"""
-            SELECT usuario.id, usuario.username, usuario.nome, usuario.email, usuario.acesso FROM USUARIO AS usuario
+            SELECT usuario.id, usuario.username, usuario.nome, usuario.email, usuario.acesso, usuario.ativo FROM USUARIO AS usuario
             {convert_dict_search}
             ORDER BY usuario.id
              """)
@@ -107,6 +107,29 @@ def atualiza_senha_usuario(id):
         return jsonify({'msg': 'Usuario nao encontrado', 'dados': {}, 'error': ''}), 404
 
 
+def atualiza_senha_adm_usuario(id, acesso_usuario_logado):
+    usuario = Usuario.query.get(id)
+    if usuario:
+        resp = request.get_json()
+        senhaNova = resp['senhaNova']
+        if senhaNova:
+            if acesso_usuario_logado == 0:
+                try:
+                    usuario.senha=senhaNova
+                    db.session.commit()
+                    result = usuario_schema.dump(usuario)
+                    return jsonify({'msg': 'Senha do usuario alterada com sucesso', 'dados': result, 'error': ''}), 200
+                except Exception as e:
+                    db.session.rollback()
+                    return jsonify({'msg': 'Nao foi possivel alterar a senha', 'dados': '', 'error': str(e)}), 500
+            else:
+                return jsonify({'msg': 'Usuario nao tem permissao para alterar a senha', 'dados': '', 'error': ''}), 401
+        else:
+            return jsonify({'msg': 'Senha atual nao confere com a que esta salva no banco', 'dados': {}, 'error': ''}), 401
+    else:
+        return jsonify({'msg': 'Usuario nao encontrado', 'dados': {}, 'error': ''}), 404
+
+
 def inativa_usuario(id):
     usuario = Usuario.query.get(id)
     if usuario:
@@ -124,12 +147,10 @@ def inativa_usuario(id):
         return jsonify({'msg': 'Usuario nao encontrado', 'dados': '', 'error': ''}), 404
 
 
-
-
 def busca_usuario(id):
     user = Usuario.query.get(id)
     if user:
-        result = usuario_schema.dump(user)
+        result_aux = usuario_schema.dump(user)
         return jsonify({'message': 'Sucesso', 'dados': result, 'error': ''}), 200
     return jsonify({'message': 'Usuários não encontrado', 'dados': {}, 'error': ''}), 404
 
