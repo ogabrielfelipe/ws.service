@@ -97,12 +97,12 @@ def busca_user(codigo):
 
 @user.route('/Usuario/AlteraSenha', methods=['PATCH'])
 @jwt_required(locations=["headers"])
-def alter_senha_usuario(codigo):
+def alter_senha_usuario():
     token_client = get_jwt()
     exp = datetime.datetime.fromtimestamp(token_client['exp'])
     
     identity = get_jwt_identity()
-
+    print(identity['id'])
     access_token = ''
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
