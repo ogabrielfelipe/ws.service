@@ -92,7 +92,7 @@ def atualiza_senha_usuario(id):
         resp = request.get_json()
         senhaAtual = resp['senhaAtual']
         senhaNova = resp['senhaNova']
-        if check_password_hash(senhaAtual, senhaNova):
+        if check_password_hash(usuario.senha, senhaAtual):
             try:
                 usuario.senha=senhaNova
                 db.session.commit()
