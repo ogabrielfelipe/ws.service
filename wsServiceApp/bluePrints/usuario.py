@@ -112,21 +112,21 @@ def alter_senha_usuario():
     return response[0], response[1]
 
 
-@user.route('/Usuario/Inativar/<int:codigo>', methods=['PATCH'])
-@jwt_required(locations=["headers"])
-def inativa_usuario_route(codigo):
-    token_client = get_jwt()
-    exp = datetime.datetime.fromtimestamp(token_client['exp'])
+# @user.route('/Usuario/Inativar/<int:codigo>', methods=['PATCH'])
+# @jwt_required(locations=["headers"])
+# def inativa_usuario_route(codigo):
+#     token_client = get_jwt()
+#     exp = datetime.datetime.fromtimestamp(token_client['exp'])
     
-    identity = get_jwt_identity()
+#     identity = get_jwt_identity()
 
-    access_token = ''
-    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
-        access_token = create_access_token(identity=identity, fresh=True)
-    response = inativa_usuario(codigo)
-    response[0].headers['token_access'] = access_token
-    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response[0], response[1]
+#     access_token = ''
+#     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
+#         access_token = create_access_token(identity=identity, fresh=True)
+#     response = inativa_usuario(codigo)
+#     response[0].headers['token_access'] = access_token
+#     response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+#     return response[0], response[1]
 
 
 @user.route('/Usuario/AlteraSenhaAdm/<int:codigo>', methods=['PATCH'])

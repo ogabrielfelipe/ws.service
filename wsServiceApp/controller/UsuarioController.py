@@ -50,17 +50,19 @@ def identifica_usuario(payload):
 def atualiza_usuario(id):
     resp = request.get_json()
     nome = resp['nome']
-    username = resp['username']
+    email = resp['email']
     acesso = resp['acesso']
+    ativo = resp['ativo']
 
     user = Usuario.query.get(id)
     if not user:
         return jsonify({'message': 'Usuário não encontrado', 'dados': {}, 'error': ''}), 404
 
     try:
-        user.username = username
+        user.email = email
         user.nome = nome
         user.acesso = acesso
+        user.ativo = ativo
         db.session.commit()
         result = usuario_schema.dumps(user)
         return jsonify({'message': 'Usuário atualizado', 'dados': result, 'error': ''}), 200
@@ -129,22 +131,22 @@ def atualiza_senha_adm_usuario(id, acesso_usuario_logado):
     else:
         return jsonify({'msg': 'Usuario nao encontrado', 'dados': {}, 'error': ''}), 404
 
-
-def inativa_usuario(id):
-    usuario = Usuario.query.get(id)
-    if usuario:
-        resp = request.get_json()
-        status = resp
-        try:
-            usuario.ativo = bool(status)
-            db.session.commit()
-            result = usuario_schema.dump(usuario)
-            return jsonify({'msg': 'Usuario inativado com sucesso', 'dados': result, 'error': ''}), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'msg': 'Nao foi possivel inativar', 'dados': '', 'error': str(e)}), 500
-    else:
-        return jsonify({'msg': 'Usuario nao encontrado', 'dados': '', 'error': ''}), 404
+ 
+# def inativa_usuario(id):
+#     usuario = Usuario.query.get(id)
+#     if usuario:
+#         resp = request.get_json()
+#         status = resp
+#         try:
+#             usuario.ativo = bool(status)
+#             db.session.commit()
+#             result = usuario_schema.dump(usuario)
+#             return jsonify({'msg': 'Usuario inativado com sucesso', 'dados': result, 'error': ''}), 200
+#         except Exception as e:
+#             db.session.rollback()
+#             return jsonify({'msg': 'Nao foi possivel inativar', 'dados': '', 'error': str(e)}), 500
+#     else:
+#         return jsonify({'msg': 'Usuario nao encontrado', 'dados': '', 'error': ''}), 404
 
 
 def busca_usuario(id):
