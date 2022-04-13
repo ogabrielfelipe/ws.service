@@ -94,7 +94,7 @@ def atualiza_senha_usuario(id):
         senhaNova = resp['senhaNova']
         if check_password_hash(usuario.senha, senhaAtual):
             try:
-                usuario.senha=senhaNova
+                usuario.senha= generate_password_hash(senhaNova)
                 db.session.commit()
                 result = usuario_schema.dump(usuario)
                 return jsonify({'msg': 'Senha do usuario alterada com sucesso', 'dados': result, 'error': ''}), 200
