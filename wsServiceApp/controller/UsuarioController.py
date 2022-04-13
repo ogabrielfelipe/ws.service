@@ -12,7 +12,7 @@ from sqlalchemy import text
 def cadastra_usuario():
     resp = request.get_json()
     senha = generate_password_hash(resp['senha'])
-    user = Usuario(username=resp['username'], email=resp['email'],nome=resp['nome'], acesso=resp['acesso'], senha=senha, ativo=resp['ativo'])
+    user = Usuario(username=resp['username'], email=resp['email'],nome=resp['nome'], acesso=resp['acesso'], senha=senha, ativo=bool(resp['ativo']))
 
     try:
         db.session.add(user)
