@@ -1,3 +1,4 @@
+from unittest import result
 from ..model.Usuario import db
 from flask import request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
@@ -104,6 +105,25 @@ def atualiza_senha_usuario(id):
             return jsonify({'msg': 'Senha atual nao confere com a que esta salva no banco', 'dados': {}, 'error': ''}), 401
     else:
         return jsonify({'msg': 'Usuario nao encontrado', 'dados': {}, 'error': ''}), 404
+
+
+def inativa_usuario(id):
+    usuario = Usuario.query.get(id)
+    if usuario:
+        resp = request.get_json()
+        status = resp
+        try:
+            usuario.ativo = bool(status)
+            db.session.commit()
+            result = usuario_schema.dump(usuario)
+            return jsonify({'msg': 'Usuario inativado com sucesso', 'dados': result, 'error': ''}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'msg': 'Nao foi possivel inativar', 'dados': '', 'error': str(e)}), 500
+    else:
+        return jsonify({'msg': 'Usuario nao encontrado', 'dados': '', 'error': ''}), 404
+
+
 
 
 def busca_usuario(id):
