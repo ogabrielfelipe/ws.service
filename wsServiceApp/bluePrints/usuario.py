@@ -129,7 +129,7 @@ def inativa_usuario_route(codigo):
     return response[0], response[1]
 
 
-@user.route('/Usuario/InativarAdm/<int:codigo>', methods=['PATCH'])
+@user.route('/Usuario/AlteraSenhaAdm/<int:codigo>', methods=['PATCH'])
 @jwt_required(locations=["headers"])
 def inativa_usuario_adm_route(codigo):
     token_client = get_jwt()
