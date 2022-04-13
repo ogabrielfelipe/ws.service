@@ -5,7 +5,6 @@ from wsServiceApp.controller.UsuarioController import (
     busca_usuarios,
     busca_usuario,
     atualiza_senha_usuario,
-    inativa_usuario,
     atualiza_senha_adm_usuario
 )
 import datetime
