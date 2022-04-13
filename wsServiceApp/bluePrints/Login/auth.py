@@ -23,10 +23,16 @@ def login():
     token = autentica_usuario(username=resp['username'], senha=resp['senha'])
 
     if token is None:
-        response = jsonify({'msg': 'Token não gerado'})
+        response = jsonify({'msg': 'Token nao gerado'})
         response.headers['token_access'] = ''
         response.headers['Access-Control-Expose-Headers'] = 'token_access'
         return response, 404
+
+    if token == 'inativo':
+        response = jsonify({'msg': 'Usuario inativo'})
+        response.headers['token_access'] = ''
+        response.headers['Access-Control-Expose-Headers'] = 'token_access'
+        return response, 403
 
     response = jsonify({"msg": "login successful"})
     response.headers['token_access'] = token
