@@ -50,7 +50,6 @@ def atualiza_usuario(id):
     resp = request.get_json()
     nome = resp['nome']
     username = resp['username']
-    senha = generate_password_hash(resp['senha'])
     acesso = resp['acesso']
 
     user = Usuario.query.get(id)
@@ -60,7 +59,6 @@ def atualiza_usuario(id):
     try:
         user.username = username
         user.nome = nome
-        user.senha = senha
         user.acesso = acesso
         db.session.commit()
         result = usuario_schema.dumps(user)
