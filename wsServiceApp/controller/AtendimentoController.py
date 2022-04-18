@@ -59,9 +59,12 @@ def cadastra_atendimento(usuario):
 
 def atualiza_atendimento(id):
     resp = request.get_json()
-    data = resp['data']
+    data = datetime.strptime(resp['data'], '%Y-%m-%d').date() 
     demanda = resp['demanda']
-    dataE = resp['dataE']
+    try:
+        dataE = datetime.strptime(resp['dataE'], '%Y-%m-%d').date() 
+    except:
+        dataE = None
     solicitante = resp['solicitante']
     modulo = resp['modulo']
     desfecho = resp['desfecho']
@@ -75,9 +78,9 @@ def atualiza_atendimento(id):
             if not atendimento:
                 return jsonify({'message': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
             try:
-                atendimento.data = datetime.strptime(data, '%Y-%m-%d').date()
+                atendimento.data = data
                 atendimento.demanda = demanda
-                atendimento.dataencerra = datetime.strptime(dataE, '%Y-%m-%d').date()
+                atendimento.dataencerra = dataE
                 atendimento.solicitante_id = solicitante
                 atendimento.modulo_id = modulo
                 atendimento.desfecho = desfecho
