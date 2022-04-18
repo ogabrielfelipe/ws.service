@@ -75,9 +75,9 @@ def atualiza_atendimento(id):
             if not atendimento:
                 return jsonify({'message': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
             try:
-                atendimento.data = data
+                atendimento.data = datetime.strptime(data, '%Y-%m-%d').date()
                 atendimento.demanda = demanda
-                atendimento.dataencerra = dataE
+                atendimento.dataencerra = datetime.strptime(dataE, '%Y-%m-%d').date()
                 atendimento.solicitante_id = solicitante
                 atendimento.modulo_id = modulo
                 atendimento.desfecho = desfecho
