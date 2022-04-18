@@ -10,9 +10,22 @@ from datetime import datetime
 
 def cadastra_atendimento(usuario):
     resp = request.get_json()
-    data = datetime.strptime(resp['data'], '%Y-%m-%d').date()
+    
+    try:
+        data = datetime.strptime(resp['data'], '%Y-%m-%d').date()
+    except Exception as e:
+        return jsonify({'msg': 'Nao foi possivel converter a data de abertura', 'dados': '', 'error': str(e)}), 500
+    
     demanda = resp['demanda']
-    dataE = datetime.strptime(resp['dataE'], '%Y-%m-%d').date()
+        
+    if not resp['dataE']:
+        dataE = ''
+    else:
+        try:
+            dataE = datetime.strptime(resp['dataE'], '%Y-%m-%d').date()
+        except Exception as e:
+            return jsonify({'msg': 'Nao foi possivel converter a data de encerramento', 'dados': '', 'error': str(e)}), 500
+    
     usuario = usuario_username(usuario).id
     competencia = resp['competencia']
     solicitante = resp['solicitante']
