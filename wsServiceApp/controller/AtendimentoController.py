@@ -94,7 +94,7 @@ def atualiza_atendimento(id):
                     db.session.rollback()
                     return jsonify({'msg': 'Não foi possível atualizar', 'dados': {}, 'error': str(e)}), 500
             else:
-                return jsonify({'msg': 'Data de Abertura não pode ser maior ou menos do que a competencia', 'dados': {}, 'error': ''}), 403
+                return jsonify({'msg': 'Data de Abertura não pode ser maior ou menor do que a competencia', 'dados': {}, 'error': ''}), 403
 
         elif bool(compTrava['trava']):
             if not atendimento:
@@ -177,25 +177,28 @@ def busca_atendimento(id):
     atendimento = Atendimento.query.get(id)
     if atendimento:
         result = atendimento_schema.dump(atendimento)
-        return jsonify({'message': 'Sucesso', 'dados': result, 'error': ''}), 200
-    return jsonify({'message': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
+        return jsonify({'msg': 'Sucesso', 'dados': result, 'error': ''}), 200
+    return jsonify({'msg': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
 
 
 def delete_atendimento(id):
     atendimento = Atendimento.query.get(id)
     if not atendimento:
-        return jsonify({'message': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
+        return jsonify({'msg': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
 
     compTrava = busca_competencia_por_atendimento(atendimento.competencia_id)
-    if compTrava['trava']:
-        if atendimento:
-            try:
-                db.session.delete(atendimento)
-                db.session.commit()
-                result = atendimento_schema.dump(atendimento)
-                return jsonify({'message': 'Atendimento excluido', 'dados': result, 'error': ''}), 200
-            except Exception as e:
-                db.session.rollback()
-                return jsonify({'message': 'Não foi possível excluir', 'dados': {}, 'error': str(e)}), 500
+    if compTrava:
+        if not bool(compTrava['trava']):
+            if atendimento:
+                try:
+                    db.session.delete(atendimento)
+                    db.session.commit()
+                    result = atendimento_schema.dump(atendimento)
+                    return jsonify({'msg': 'Atendimento excluido', 'dados': result, 'error': ''}), 200
+                except Exception as e:
+                    db.session.rollback()
+                    return jsonify({'msg': 'Nao foi possivel excluir', 'dados': {}, 'error': str(e)}), 500
+        else:
+            return jsonify({'msg': 'Competencia Fechada', 'dados': {}, 'error': ''}), 403
     else:
-        return jsonify({'message': 'Competência Fechada', 'dados': {}, 'error': ''}), 403
+        return jsonify({'msg': 'Competencia nao encontrada', 'dados': {}, 'error': ''}), 404
