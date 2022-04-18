@@ -34,8 +34,8 @@ def cadastra_atendimento(usuario):
     status = resp['status']
 
     compTrava = busca_competencia_por_atendimento(competencia)
-    if bool(compTrava['trava']):
-        if data >= compTrava['dataF'] or data <= compTrava['dataI']:
+    if not bool(compTrava['trava']):
+        if data >= datetime.strptime(compTrava['dataF'], '%Y-%m-%d').date() or data <= datetime.strptime(compTrava['dataI'], '%Y-%m-%d').date():
             atendimento = Atendimento(data=data, dataE=dataE, demanda=demanda, usuario=usuario, competencia=competencia,
                                   solicitante=solicitante, modulo=modulo, desfecho=desfecho, status=status)
             try:
