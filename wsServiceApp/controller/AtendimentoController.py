@@ -26,7 +26,7 @@ def cadastra_atendimento(usuario):
         except Exception as e:
             return jsonify({'msg': 'Nao foi possivel converter a data de encerramento', 'dados': '', 'error': str(e)}), 500
     
-    usuario = usuario_username(usuario)['id']
+    usuario = usuario['id']
     competencia = resp['competencia']
     solicitante = resp['solicitante']
     modulo = resp['modulo']
