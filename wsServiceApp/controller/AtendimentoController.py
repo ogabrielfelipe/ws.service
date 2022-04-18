@@ -87,7 +87,7 @@ def atualiza_atendimento(id):
                 atendimento.status = status
                 db.session.commit()
                 result = atendimento_schema.dump(atendimento)
-                return jsonify({'message': 'Atendimento atualizado', 'dados': result})
+                return jsonify({'message': 'Atendimento atualizado', 'dados': result}), 200
             except Exception as e:
                 db.session.rollback()
                 return jsonify({'message': 'Não foi possível atualizar', 'dados': {}, 'error': str(e)}), 500
