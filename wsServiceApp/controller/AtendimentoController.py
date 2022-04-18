@@ -45,16 +45,16 @@ def cadastra_atendimento(usuario):
                     db.session.add(atendimento)
                     db.session.commit()
                     result = atendimento_schema.dump(atendimento)
-                    return jsonify({'message': 'Atendimento cadastrado com sucesso', 'dados': result, 'error': ''}), 201
+                    return jsonify({'msg': 'Atendimento cadastrado com sucesso', 'dados': result, 'error': ''}), 201
                 except Exception as e:
                     db.session.rollback()
-                    return jsonify({'message': 'Erro ao cadastrar', 'dados': {}, 'error': str(e)}), 500
+                    return jsonify({'msg': 'Erro ao cadastrar', 'dados': {}, 'error': str(e)}), 500
             else:
-                return jsonify({'message': 'Data de cadastro nao compativel com a competencia', 'dados': {}, 'error': ''}), 403
+                return jsonify({'msg': 'Data de cadastro nao compativel com a competencia', 'dados': {}, 'error': ''}), 403
         else:
-            return jsonify({'message': 'Competencia Finalizada', 'dados': {}, 'error': ''}), 403
+            return jsonify({'msg': 'Competencia Finalizada', 'dados': {}, 'error': ''}), 403
     else:
-        return jsonify({'message': 'Competencia nao cadastrada', 'dados': {}, 'error': ''}), 404
+        return jsonify({'msg': 'Competencia nao cadastrada', 'dados': {}, 'error': ''}), 404
 
 
 def atualiza_atendimento(id):
@@ -76,25 +76,29 @@ def atualiza_atendimento(id):
     if compTrava:
         if not bool(compTrava['trava']):
             if not atendimento:
-                return jsonify({'message': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
-            try:
-                atendimento.data = data
-                atendimento.demanda = demanda
-                atendimento.dataencerra = dataE
-                atendimento.solicitante_id = solicitante
-                atendimento.modulo_id = modulo
-                atendimento.desfecho = desfecho
-                atendimento.status = status
-                db.session.commit()
-                result = atendimento_schema.dump(atendimento)
-                return jsonify({'message': 'Atendimento atualizado', 'dados': result}), 200
-            except Exception as e:
-                db.session.rollback()
-                return jsonify({'message': 'Não foi possível atualizar', 'dados': {}, 'error': str(e)}), 500
-        
+                return jsonify({'msg': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
+
+            if data >= datetime.strptime(compTrava['dataI'], '%Y-%m-%d').date() and data <= datetime.strptime(compTrava['dataF'], '%Y-%m-%d').date():
+                try:
+                    atendimento.data = data
+                    atendimento.demanda = demanda
+                    atendimento.dataencerra = dataE
+                    atendimento.solicitante_id = solicitante
+                    atendimento.modulo_id = modulo
+                    atendimento.desfecho = desfecho
+                    atendimento.status = status
+                    db.session.commit()
+                    result = atendimento_schema.dump(atendimento)
+                    return jsonify({'msg': 'Atendimento atualizado', 'dados': result, 'error': ''}), 200
+                except Exception as e:
+                    db.session.rollback()
+                    return jsonify({'msg': 'Não foi possível atualizar', 'dados': {}, 'error': str(e)}), 500
+            else:
+                return jsonify({'msg': 'Data de Abertura não pode ser maior ou menos do que a competencia', 'dados': {}, 'error': ''}), 403
+
         elif bool(compTrava['trava']):
             if not atendimento:
-                return jsonify({'message': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
+                return jsonify({'msg': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
             
             try:
                 atendimento.desfecho = desfecho
@@ -102,12 +106,12 @@ def atualiza_atendimento(id):
                 atendimento.dataencerra = dataE
                 db.session.commit()
                 result = atendimento_schema.dump(atendimento)
-                return jsonify({'message': 'Atendimento atualizado, somente os campos (desfecho, status, dataEncerramento)', 'dados': result, 'error': ''}), 200
+                return jsonify({'msg': 'Atendimento atualizado, somente os campos (desfecho, status, dataEncerramento)', 'dados': result, 'error': ''}), 200
             except Exception as e:
                 db.session.rollback()
-                return jsonify({'message': 'Não foi possível atualizar os campos (desfecho, status, dataEncerramento)', 'dados': {}, 'error': str(e)}), 500
+                return jsonify({'msg': 'Não foi possível atualizar os campos (desfecho, status, dataEncerramento)', 'dados': {}, 'error': str(e)}), 500
     else:
-        return jsonify({'message': 'Competencia nao cadastrada', 'dados': {}, 'error': ''}), 404
+        return jsonify({'msg': 'Competencia nao cadastrada', 'dados': {}, 'error': ''}), 404
 
 
 
