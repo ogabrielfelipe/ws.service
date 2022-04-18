@@ -125,7 +125,7 @@ def busca_competencia_por_usuario_comp_ano(comp, ano):
 def delete_competencia(id):
     competencia = Competencia.query.get(id)
     if not competencia:
-        return jsonify({'message': 'Competencia não encontrado', 'dados': {}, 'error': ''}), 404
+        return jsonify({'message': 'Competencia nao encontrado', 'dados': {}, 'error': ''}), 404
 
     if busca_atendimento_por_competencia(competencia.id):
         try:
@@ -134,13 +134,13 @@ def delete_competencia(id):
             result = competencia_schema.dump(competencia)
             return jsonify({'message': 'Competencia excluido', 'dados': result, 'error': ''}), 200
         except Exception as e:
-            return jsonify({'message': 'Não foi possível excluir', 'dados': {}, 'error': str(e)}), 500
+            return jsonify({'message': 'Nao foi possível excluir', 'dados': {}, 'error': str(e)}), 500
     else:
-        return jsonify({'message': 'Competencia já possui Atendimento Vinculado', 'dados': {}, 'error': ''}), 403
+        return jsonify({'message': 'Competencia ja possui Atendimento Vinculado', 'dados': {}, 'error': ''}), 403
 
 
 def busca_atendimento_por_competencia(idCompetencia):
-    atendimento = Atendimento.query.filter(Atendimento.competencia == idCompetencia)
+    atendimento = Atendimento.query.filter(Atendimento.competencia_id == idCompetencia)
     _atendimento = atendimentos_schema.dump(atendimento)
     if _atendimento:
         return False
