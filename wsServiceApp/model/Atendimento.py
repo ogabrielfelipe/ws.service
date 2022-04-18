@@ -9,7 +9,7 @@ class Atendimento(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     data = db.Column(db.Date, nullable=False)
     demanda = db.Column(db.String(1024), nullable=False)
-    dataE = db.Column(db.Date)
+    dataencerra = db.Column(db.Date)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     usuario = db.relationship('Usuario')
     competencia_id = db.Column(db.Integer, db.ForeignKey('competencia.id'), nullable=False)
@@ -24,7 +24,7 @@ class Atendimento(db.Model):
     def __init__(self, data, demanda, dataE, usuario, competencia, solicitante, modulo, desfecho, status):
         self.data = data
         self.demanda = demanda
-        self.dataE = dataE
+        self.dataencerra = dataE
         self.usuario_id = usuario
         self.competencia_id = competencia
         self.solicitante_id = solicitante

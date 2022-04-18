@@ -4,7 +4,7 @@ from ..controller.AtendimentoController import (
     cadastra_atendimento,
     atualiza_atendimento,
     busca_atendimento,
-    busca_atendimentos,
+    busca_atendimentos_por_competencia,
     delete_atendimento
 )
 import datetime
@@ -91,7 +91,7 @@ def busc_atendimentos():
     access_token = ''
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
-    response = busca_atendimentos()
+    response = busca_atendimentos_por_competencia(identity)
     response.headers['token_access'] = access_token
     response.headers['Access-Control-Expose-Headers'] = 'token_access'
     return response
