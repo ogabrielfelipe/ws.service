@@ -41,7 +41,7 @@ def cadastra_atendimento(usuario):
             try:
                 db.session.add(atendimento)
                 db.session.commit()
-                result = atendimento_schema(atendimento)
+                result = atendimento_schema.dump(atendimento)
                 return jsonify({'message': 'Atendimento com sucesso', 'dados': result})
             except SQLAlchemyError as sa:
                 print(sa)
