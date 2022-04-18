@@ -78,8 +78,8 @@ def atualiza_atendimento(id):
                 atendimento.data = data
                 atendimento.demanda = demanda
                 atendimento.dataencerra = dataE
-                atendimento.solicitante = solicitante
-                atendimento.modulo = modulo
+                atendimento.solicitante_id = solicitante
+                atendimento.modulo_id = modulo
                 atendimento.desfecho = desfecho
                 atendimento.status = status
                 db.session.commit()
