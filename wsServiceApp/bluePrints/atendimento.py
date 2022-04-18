@@ -7,8 +7,7 @@ from ..controller.AtendimentoController import (
     busca_atendimentos,
     delete_atendimento
 )
-from datetime import datetime
-from datetime import timezone, timedelta
+import datetime
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,

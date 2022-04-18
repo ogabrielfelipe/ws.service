@@ -46,8 +46,6 @@ def atualiza_atendimento(id):
     data = resp['data']
     demanda = resp['demanda']
     dataE = resp['dataE']
-    usuario = resp['usuario']
-    competencia = resp['competencia']
     solicitante = resp['solicitante']
     modulo = resp['modulo']
     desfecho = resp['desfecho']
@@ -63,8 +61,6 @@ def atualiza_atendimento(id):
             atendimento.data = data
             atendimento.demanda = demanda
             atendimento.dataE = dataE
-            atendimento.usuario = usuario
-            atendimento.competencia = competencia
             atendimento.solicitante = solicitante
             atendimento.modulo = modulo
             atendimento.desfecho = desfecho
