@@ -19,7 +19,7 @@ def cadastra_atendimento(usuario):
     demanda = resp['demanda']
         
     if not resp['dataE']:
-        dataE = ""
+        dataE = None
     else:
         try:
             dataE = datetime.strptime(resp['dataE'], '%Y-%m-%d').date()
