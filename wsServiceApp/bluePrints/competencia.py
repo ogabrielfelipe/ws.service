@@ -21,9 +21,13 @@ from flask_jwt_extended import (
     set_access_cookies,
     unset_jwt_cookies
 )
+from flask_cors import CORS
 
 
 comp = Blueprint('comp', __name__)
+
+
+CORS(comp)
 
 
 @comp.route('/Competencia/Cadastrar', methods=['POST'])
@@ -38,9 +42,9 @@ def cad_competencia():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_competencia(usuario=get_jwt_identity())
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @comp.route('/Competencia/Alterar/<int:codigo>', methods=['PATCH'])
@@ -55,9 +59,9 @@ def alter_competencia(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_competencia(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @comp.route('/Competencia/AlterarTrava/<int:codigo>', methods=['PATCH'])
@@ -72,12 +76,12 @@ def alter_trava_competencia(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = altera_trava_competencia(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@comp.route('/Competencia/BuscaCompetencia/<int:codigo>', methods=['GET'])
+@comp.route('/Competencia/BuscaCompetencia/<int:codigo>', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_competencia(codigo):
     token_client = get_jwt()
@@ -89,12 +93,12 @@ def busc_competencia(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_competencia(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@comp.route('/Competencia/BuscaCompetencias', methods=['GET'])
+@comp.route('/Competencia/BuscaCompetencias', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_competencias():
     token_client = get_jwt()
@@ -106,12 +110,12 @@ def busc_competencias():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_competencias()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@comp.route('/Competencia/BuscaCompetenciaMes', methods=['GET'])
+@comp.route('/Competencia/BuscaCompetenciaMes', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_mes_competencias():
     token_client = get_jwt()
@@ -123,12 +127,12 @@ def busc_mes_competencias():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = busca_competencia_mes()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-@comp.route('/Competencia/ListarCompetencias', methods=['GET'])
+@comp.route('/Competencia/ListarCompetencias', methods=['POST'])
 @jwt_required(locations=["headers"])
 def lista_competencias():
     token_client = get_jwt()
@@ -138,9 +142,9 @@ def lista_competencias():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = listar_competencias()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @comp.route('/Competencia/Excluir/<int:codigo>', methods=['DELETE'])
@@ -155,6 +159,6 @@ def exclui_competencia(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_competencia(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
