@@ -34,15 +34,19 @@ def usuario_username(username):
 
 def autentica_usuario(username, senha):
     user = usuario_username(username)
-    user_json = usuario_schema.dump(user)
-    if user_json['ativo'] == True:
-        if user and check_password_hash(user.senha, senha):
-            access_token = create_access_token(identity=user_json, fresh=True)
-            return access_token
+    if user:
+        user_json = usuario_schema.dump(user)
+        if user_json['ativo'] == True:
+            if user and check_password_hash(user.senha, senha):
+                access_token = create_access_token(identity=user_json, fresh=True)
+                return access_token
+            else:
+                return None
         else:
-            return None
+            return 'inativo'
     else:
-        return 'inativo'
+        return 'username nao existe'
+
 
 def identifica_usuario(payload):
     usuario_id = payload['identity']

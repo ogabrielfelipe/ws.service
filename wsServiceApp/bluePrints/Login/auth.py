@@ -34,6 +34,13 @@ def login():
         response.headers['Access-Control-Expose-Headers'] = 'token_access'
         return response, 403
 
+    if token == 'username nao existe':
+        response = jsonify({'msg': 'Usuario nao encontrado'})
+        response.headers['token_access'] = ''
+        response.headers['Access-Control-Expose-Headers'] = 'token_access'
+        return response, 404
+
+
     response = jsonify({"msg": "login successful"})
     response.headers['token_access'] = token
     response.headers['Access-Control-Expose-Headers'] = 'token_access'
