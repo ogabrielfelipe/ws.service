@@ -29,6 +29,5 @@ typing-extensions==4.0.1
 Werkzeug==2.0.2
 sh==1.14.2
 plumbum==1.7.2
-Flask-AlchemyDumps==0.0.13
 python-decouple==3.6
 flask_script==2.0.6
