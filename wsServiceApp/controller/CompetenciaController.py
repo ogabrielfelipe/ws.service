@@ -30,26 +30,6 @@ def cadastra_competencia(usuario):
     else:
         return jsonify({'message': 'Ja existe uma competencia criada', 'dados': {}, 'error': ''}), 401
 
-# Alteração de competencia, somente no intervalo entre datas
-def atualiza_competencia(id):
-    resp = request.get_json()
-    dataI = datetime.strptime(resp['dataI'], '%Y-%m-%d').date()
-    dataF = datetime.strptime(resp['dataF'], '%Y-%m-%d').date()
-
-    competencia = Competencia.query.get(id)
-    if not competencia:
-        return jsonify({'message': 'Modulo nao encontrado', 'dados': {}, 'error': ''}), 404
-
-    try:
-        competencia.dataI = dataI
-        competencia.dataF = dataF
-        db.session.commit()
-        result = competencia_schema.dump(competencia)
-        return jsonify({'message': 'Competencia atualizado', 'dados': result, 'error': ''}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'message': 'Nao foi possivel atualizar', 'dados': {}, 'error': str(e)}), 500
-
 
 def altera_trava_competencia(id):
     resp = request.get_json()
