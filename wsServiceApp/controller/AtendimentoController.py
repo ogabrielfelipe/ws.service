@@ -34,12 +34,13 @@ def cadastra_atendimento(usuario):
     modulo = resp['modulo']
     desfecho = resp['desfecho']
     status = resp['status']
+    observacao = resp['observacao']
 
     compTrava = busca_competencia_por_atendimento(competencia)
     if compTrava:
         if not bool(compTrava['trava']):
             if data >= datetime.strptime(compTrava['dataI'], '%Y-%m-%d').date() and data <= datetime.strptime(compTrava['dataF'], '%Y-%m-%d').date():
-                atendimento = Atendimento(data=data, dataE=dataE, demanda=demanda, usuario=usuario, competencia=competencia,
+                atendimento = Atendimento(data=data, dataE=dataE, demanda=demanda, observacao=observacao, usuario=usuario, competencia=competencia,
                                     solicitante=solicitante, modulo=modulo, desfecho=desfecho, status=status)
                 try:
                     db.session.add(atendimento)
@@ -61,6 +62,7 @@ def atualiza_atendimento(id):
     resp = request.get_json()
     data = datetime.strptime(resp['data'], '%Y-%m-%d').date() 
     demanda = resp['demanda']
+    observacao = resp['observacao']
     try:
         dataE = datetime.strptime(resp['dataE'], '%Y-%m-%d').date() 
     except:
@@ -87,6 +89,7 @@ def atualiza_atendimento(id):
                     atendimento.modulo_id = modulo
                     atendimento.desfecho = desfecho
                     atendimento.status = status
+                    atendimento.observacao = observacao
                     db.session.commit()
                     result = atendimento_schema.dump(atendimento)
                     return jsonify({'msg': 'Atendimento atualizado', 'dados': result, 'error': ''}), 200
@@ -101,6 +104,7 @@ def atualiza_atendimento(id):
                 return jsonify({'msg': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
             
             try:
+                atendimento.observacao = observacao
                 atendimento.desfecho = desfecho
                 atendimento.status = status
                 atendimento.dataencerra = dataE
@@ -114,20 +118,18 @@ def atualiza_atendimento(id):
         return jsonify({'msg': 'Competencia nao cadastrada', 'dados': {}, 'error': ''}), 404
 
 
-
-
 def busca_atendimentos_por_competencia(usuario):
     resp = request.get_json()
     competencia = resp['competencia']
     try:
         sql_atendimentos = text(f"""
-            SELECT atendimento.id as id_atendimetno, atendimento.data as data_abertura, atendimento.dataencerra as data_encerramento,
-                    competencia.id as competencia_id, competencia.comp as competencia,
-                    competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id, modulo.sigla as sigla_modulo,
-                    modulo.nome as nome_modulo, modulo.sistema as sistema_id, sistema.sigla as sigla_sistema,
-                    sistema.nome as nome_sistema, solicitante.id as solicitante_id, solicitante.nome as nome_solicitante,
-                    atendimento.demanda as demanda_atendimento, atendimento.desfecho as desfecho_atendimento,
-                    atendimento.status as status_atendimento
+            SELECT atendimento.id as id_atendimetno, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,
+                to_char(atendimento.dataencerra, 'DD/MM/YYYY') as data_encerramento, competencia.id as competencia_id,
+                competencia.comp as competencia, competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id,
+                modulo.sigla as sigla_modulo, modulo.nome as nome_modulo, modulo.sistema as sistema_id,
+                sistema.sigla as sigla_sistema, sistema.nome as nome_sistema, solicitante.id as solicitante_id,
+                solicitante.nome as nome_solicitante, atendimento.demanda as demanda_atendimento,
+                atendimento.desfecho as desfecho_atendimento, atendimento.status as status_atendimento
 
             FROM ATENDIMENTO AS atendimento
             INNER JOIN COMPETENCIA AS competencia ON competencia.id = atendimento.competencia_id
@@ -150,19 +152,20 @@ def busca_atendimentos_personalizada():
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_atendimentos = text(f"""
-            SELECT atendimento.id as id_atendimetno, atendimento.data as data_abertura, atendimento.dataencerra as data_encerramento,
-                    competencia.id as competencia_id, competencia.comp as competencia,
-                    competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id, modulo.sigla as sigla_modulo,
-                    modulo.nome as nome_modulo, modulo.sistema as sistema_id, sistema.sigla as sigla_sistema,
-                    sistema.nome as nome_sistema, solicitante.id as solicitante_id, solicitante.nome as nome_solicitante,
-                    atendimento.demanda as demanda_atendimento, atendimento.desfecho as desfecho_atendimento,
-                    atendimento.status as status_atendimento
-
+            SELECT atendimento.id as id_atendimetno, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,
+                to_char(atendimento.dataencerra, 'DD/MM/YYYY') as data_encerramento, competencia.id as competencia_id,
+                competencia.comp as competencia, competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id,
+                modulo.sigla as sigla_modulo, modulo.nome as nome_modulo, modulo.sistema as sistema_id,
+                sistema.sigla as sigla_sistema, sistema.nome as nome_sistema, solicitante.id as solicitante_id,
+                solicitante.nome as nome_solicitante, atendimento.demanda as demanda_atendimento, 
+                atendimento.observacao as observacao_atendimento, atendimento.desfecho as desfecho_atendimento, 
+                atendimento.status as status_atendimento, usuario.id as usuario_id, usuario.nome as nome_usuario
             FROM ATENDIMENTO AS atendimento
             INNER JOIN COMPETENCIA AS competencia ON competencia.id = atendimento.competencia_id
             INNER JOIN MODULO AS modulo ON modulo.id = atendimento.modulo_id
             INNER JOIN SISTEMA AS sistema ON sistema.id = modulo.sistema
             INNER JOIN SOLICITANTE AS solicitante ON solicitante.id = atendimento.solicitante_id
+            INNER JOIN USUARIO AS usuario on usuario.id = atendimento.usuario_id
             {convert_dict_search}
         """)
         consultaAtendimentos = db.session.execute(sql_atendimentos).fetchall()
