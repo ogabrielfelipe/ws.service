@@ -13,9 +13,10 @@ from flask_jwt_extended import (
     set_access_cookies,
     unset_jwt_cookies
 )
+from flask_cors import CORS
 aut = Blueprint('auth', __name__)
 jwt = JWTManager()
-
+CORS(aut)
 
 @aut.route('/Auth/Login', methods=['POST'])
 def login():
