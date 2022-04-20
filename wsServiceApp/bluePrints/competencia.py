@@ -5,7 +5,6 @@ from ..controller.CompetenciaController import (
     cadastra_competencia,
     busca_competencia,
     busca_competencias,
-    atualiza_competencia,
     altera_trava_competencia,
     delete_competencia,
     busca_competencia_mes,
