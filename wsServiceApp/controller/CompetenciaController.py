@@ -1,4 +1,3 @@
-from sqlalchemy.exc import SQLAlchemyError
 from ..model.Competencia import Competencia, competencia_schema, competencias_schema
 from ..model.Usuario import db
 from ..model.Atendimento import Atendimento, atendimento_schema, atendimentos_schema
@@ -6,7 +5,7 @@ from ..controller.UsuarioController import usuario_username
 from flask import request, jsonify
 from datetime import datetime
 from sqlalchemy import and_, text
-from .util import calcula_intervalo_mes
+from .util import calcula_intervalo_mes, convert_pesquisa_consulta
 
 def cadastra_competencia(usuario):
     resp = request.get_json()
@@ -50,22 +49,23 @@ def altera_trava_competencia(id):
 
 
 def busca_competencias():
-    competencia = Competencia.query.all()
-    if competencia:
-        result = competencias_schema.dump(competencia)
-        return jsonify({'message': 'Competencia', 'dados': result, 'error': ''}), 200
-    return jsonify({'message': 'Competencia não encontrado', 'dados': {}, 'error': ''}), 404
-
-
-def busca_competencia_mes():
     resp = request.get_json()
-    comp = resp['comp']
-    ano = resp['ano']
-    competencia = db.session.query(Competencia).filter(and_(Competencia.comp == comp, Competencia.ano == ano)).one()
-    if competencia:
-        result = competencia_schema.dump(competencia)
-        return jsonify({'msg': 'Busca Efetuada com sucesso', 'dados': result, 'error': ''}), 200
-    return jsonify({'msg': 'Não foi possível efetuar a busca', 'dados': {}, 'error': ''}), 404
+    convert_dict_search = convert_pesquisa_consulta(resp)    
+    try:
+        sql_comp = text(f"""
+                SELECT competencia.id as id_competencia, competencia.comp as mes_competencia, competencia.ano as ano_competencia,
+                    to_char(competencia."dataI", 'DD/MM/YYYY') as data_inicial, to_char(competencia."dataF", 'DD/MM/YYYY') as data_final,
+                    competencia.trava as trava_competencia, competencia.usuario_id as usuario_id, usuario.nome as nome_usuario
+                FROM COMPETENCIA as competencia
+                INNER JOIN USUARIO AS usuario on usuario.id = competencia.usuario_id
+                {convert_dict_search}
+                ORDER BY competencia.comp, competencia.ano
+        """)
+        consultaCompetencia = db.session.execute(sql_comp).fetchall()
+        consultaCompetencia_dict = [dict(u) for u in consultaCompetencia]
+        return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaCompetencia_dict, 'error': ''}), 200
+    except Exception as e:
+        return jsonify({'msg': 'Não foi possível fazer a busca', 'dados': {}, 'error': str(e)}), 500
 
 
 def listar_competencias():
@@ -102,7 +102,6 @@ def busca_competencia_por_usuario_comp_ano(comp, ano):
     return False
 
 
-# Somente deleta a competencia caso nao tenha atendimento vinculado a competencia
 def delete_competencia(id):
     competencia = Competencia.query.get(id)
     if not competencia:
