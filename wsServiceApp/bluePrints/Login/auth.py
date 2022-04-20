@@ -27,24 +27,29 @@ def login():
         response = jsonify({'msg': 'Token nao gerado'})
         response.headers['token_access'] = ''
         response.headers['Access-Control-Expose-Headers'] = 'token_access'
+        response.headers['Access-Control-Allow-Origin'] = '*'
         return response, 404
 
     if token == 'inativo':
         response = jsonify({'msg': 'Usuario inativo'})
         response.headers['token_access'] = ''
         response.headers['Access-Control-Expose-Headers'] = 'token_access'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+
         return response, 403
 
     if token == 'username nao existe':
         response = jsonify({'msg': 'Username nao encontrado'})
         response.headers['token_access'] = ''
         response.headers['Access-Control-Expose-Headers'] = 'token_access'
+        response.headers['Access-Control-Allow-Origin'] = '*'
         return response, 404
 
 
     response = jsonify({"msg": "login successful"})
     response.headers['token_access'] = token
     response.headers['Access-Control-Expose-Headers'] = 'token_access'
+        response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 
 
