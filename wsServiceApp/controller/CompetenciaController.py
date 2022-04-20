@@ -6,14 +6,15 @@ from ..controller.UsuarioController import usuario_username
 from flask import request, jsonify
 from datetime import datetime
 from sqlalchemy import and_, text
-
+from .util import calcula_intervalo_mes
 
 def cadastra_competencia(usuario):
     resp = request.get_json()
     comp = resp['comp']
     ano = resp['ano']
-    dataI = datetime.strptime(resp['dataI'], '%Y-%m-%d').date()
-    dataF = datetime.strptime(resp['dataF'], '%Y-%m-%d').date()
+    intervalo_mes = calcula_intervalo_mes(str(comp)+'/'+str(ano))
+    dataI = intervalo_mes[0]
+    dataF = intervalo_mes[1]
     trava = bool(resp['trava'])
 
     competencia = Competencia(comp=comp, ano=ano, dataI=dataI, dataF=dataF, trava=trava, usuario=usuario['id'])
