@@ -118,35 +118,6 @@ def atualiza_atendimento(id):
         return jsonify({'msg': 'Competencia nao cadastrada', 'dados': {}, 'error': ''}), 404
 
 
-def busca_atendimentos_por_competencia(usuario):
-    resp = request.get_json()
-    competencia = resp['competencia']
-    try:
-        sql_atendimentos = text(f"""
-            SELECT atendimento.id as id_atendimetno, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,
-                to_char(atendimento.dataencerra, 'DD/MM/YYYY') as data_encerramento, competencia.id as competencia_id,
-                competencia.comp as competencia, competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id,
-                modulo.sigla as sigla_modulo, modulo.nome as nome_modulo, modulo.sistema as sistema_id,
-                sistema.sigla as sigla_sistema, sistema.nome as nome_sistema, solicitante.id as solicitante_id,
-                solicitante.nome as nome_solicitante, atendimento.demanda as demanda_atendimento,
-                atendimento.desfecho as desfecho_atendimento, atendimento.status as status_atendimento
-
-            FROM ATENDIMENTO AS atendimento
-            INNER JOIN COMPETENCIA AS competencia ON competencia.id = atendimento.competencia_id
-            INNER JOIN MODULO AS modulo ON modulo.id = atendimento.modulo_id
-            INNER JOIN SISTEMA AS sistema ON sistema.id = modulo.sistema
-            INNER JOIN SOLICITANTE AS solicitante ON solicitante.id = atendimento.solicitante_id
-            WHERE atendimento.usuario_id = {usuario['id']} AND atendimento.competencia_id = {competencia}
-        """)
-        consultaAtendimentos = db.session.execute(sql_atendimentos).fetchall()
-        consultaAtendimentos_dict = [dict(u) for u in consultaAtendimentos]
-        return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaAtendimentos_dict, 'error': ''}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'msg': 'Nao foi efetuado a busca com sucesso', 'dados': {}, 'error': str(e)}), 500
-    
-
-
 def busca_atendimentos_personalizada():    
     resp = request.get_json()    
     convert_dict_search = convert_pesquisa_consulta(resp)
@@ -175,14 +146,6 @@ def busca_atendimentos_personalizada():
         db.session.rollback()
         return jsonify({'msg': 'Nao foi efetuado a busca com sucesso', 'dados': {}, 'error': str(e)}), 500
     
-
-def busca_atendimento(id):
-    atendimento = Atendimento.query.get(id)
-    if atendimento:
-        result = atendimento_schema.dump(atendimento)
-        return jsonify({'msg': 'Sucesso', 'dados': result, 'error': ''}), 200
-    return jsonify({'msg': 'Atendimento não encontrado', 'dados': {}, 'error': ''}), 404
-
 
 def delete_atendimento(id):
     atendimento = Atendimento.query.get(id)

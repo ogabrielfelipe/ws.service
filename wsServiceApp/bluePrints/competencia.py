@@ -3,7 +3,6 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from ..controller.CompetenciaController import (
     cadastra_competencia,
-    busca_competencia,
     busca_competencias,
     altera_trava_competencia,
     delete_competencia,
@@ -57,23 +56,6 @@ def alter_trava_competencia(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = altera_trava_competencia(codigo)
-    response[0].headers['token_access'] = access_token
-    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response[0], response[1]
-
-
-@comp.route('/Competencia/BuscaCompetencia/<int:codigo>', methods=['POST'])
-@jwt_required(locations=["headers"])
-def busc_competencia(codigo):
-    token_client = get_jwt()
-    exp = datetime.datetime.fromtimestamp(token_client['exp'])
-    
-    identity = get_jwt_identity()
-
-    access_token = ''
-    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
-        access_token = create_access_token(identity=identity, fresh=True)
-    response = busca_competencia(codigo)
     response[0].headers['token_access'] = access_token
     response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
     return response[0], response[1]

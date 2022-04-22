@@ -7,6 +7,7 @@ from datetime import datetime
 from sqlalchemy import and_, text
 from .util import calcula_intervalo_mes, convert_pesquisa_consulta
 
+
 def cadastra_competencia(usuario):
     resp = request.get_json()
     comp = resp['comp']
@@ -76,14 +77,6 @@ def listar_competencias():
         return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaCompetencia_dict, 'error': ''}), 200
     except Exception as e:
         return jsonify({'msg': 'Não foi possível fazer a busca', 'dados': {}, 'error': str(e)}), 500
-
-
-def busca_competencia(id):
-    competencia = Competencia.query.get(id)
-    if competencia:
-        result = competencia_schema.dump(competencia)
-        return jsonify({'message': 'Sucesso', 'dados': result, 'error': ''}), 200
-    return jsonify({'message': 'Competencia não encontrado', 'dados': {}, 'error': ''}), 500
 
 
 def busca_competencia_por_atendimento(id):
