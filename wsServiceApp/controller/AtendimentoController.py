@@ -123,7 +123,7 @@ def busca_atendimentos_personalizada():
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_atendimentos = text(f"""
-            SELECT atendimento.id as id_atendimento, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,
+            SELECT atendimento.id as id_atendimento, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,            
                 to_char(atendimento.dataencerra, 'DD/MM/YYYY') as data_encerramento, competencia.id as competencia_id,
                 competencia.comp as competencia, competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id,
                 modulo.sigla as sigla_modulo, modulo.nome as nome_modulo, modulo.sistema as sistema_id,
@@ -168,4 +168,7 @@ def delete_atendimento(id):
             return jsonify({'msg': 'Competencia Fechada', 'dados': {}, 'error': ''}), 403
     else:
         return jsonify({'msg': 'Competencia nao encontrada', 'dados': {}, 'error': ''}), 404
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c7ffc14937761de069f8c3d6f6ea53d2f7036a5
