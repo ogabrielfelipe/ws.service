@@ -168,7 +168,3 @@ def delete_atendimento(id):
             return jsonify({'msg': 'Competencia Fechada', 'dados': {}, 'error': ''}), 403
     else:
         return jsonify({'msg': 'Competencia nao encontrada', 'dados': {}, 'error': ''}), 404
-<<<<<<< HEAD
-
-=======
->>>>>>> 5c7ffc14937761de069f8c3d6f6ea53d2f7036a5
