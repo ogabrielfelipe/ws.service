@@ -38,6 +38,7 @@ def relatorio_atendimento_ordem_data(usuario_logado):
 
         data = consultaAtendimentos_dict
         df = pd.DataFrame(data)
+        verifica_diretorio_temp()
         varre_pasta_temp()
         nomeArquivoGerado = str(datetime.datetime.now())+'.xlsx'
         df.to_excel(tempPath+'/'+nomeArquivoGerado, index=False, header=True)
@@ -66,3 +67,9 @@ def varre_pasta_temp():
     except Exception as e:
         print(e)
         return False
+
+def verifica_diretorio_temp():
+    if os.path.isdir(tempPath):
+        return True
+    else:
+        os.makedirs(tempPath)
