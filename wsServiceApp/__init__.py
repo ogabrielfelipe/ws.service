@@ -16,6 +16,7 @@ from wsServiceApp.bluePrints import (
     cliente,
     atendimento
 )
+from .bluePrints.Relatorio import atendimentoRelatorio
 from .model import (
     Solicitante,
     Sistema,
@@ -39,6 +40,7 @@ app.register_blueprint(modulo.mod)
 app.register_blueprint(competencia.comp)
 app.register_blueprint(cliente.client)
 app.register_blueprint(atendimento.atend)
+app.register_blueprint(atendimentoRelatorio.atendRel)
 
 
 db.init_app(app)
@@ -61,7 +63,7 @@ with app.app_context():
 
     users_exist = Usuario.query.all()
     if not users_exist:
-        user = Usuario('master', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br')
+        user = Usuario('master', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br', 1)
         try:
             db.session.add(user)
             db.session.commit()

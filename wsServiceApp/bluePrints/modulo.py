@@ -60,7 +60,7 @@ def alter_modulo(codigo):
     return response[0], response[1]
 
 
-@mod.route('/Modulo/BuscaModulo/<codigo>', methods=['GET'])
+@mod.route('/Modulo/BuscaModulo/<codigo>', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_modulo(codigo):
     token_client = get_jwt()
@@ -77,7 +77,7 @@ def busc_modulo(codigo):
     return response[0], response[1]
 
 
-@mod.route('/Modulo/BuscaModulos', methods=['GET'])
+@mod.route('/Modulo/BuscaModulos', methods=['POST'])
 @jwt_required(locations=["headers"])
 def busc_modulos():
     token_client = get_jwt()

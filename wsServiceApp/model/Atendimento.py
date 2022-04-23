@@ -9,7 +9,8 @@ class Atendimento(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     data = db.Column(db.Date, nullable=False)
     demanda = db.Column(db.String(1024), nullable=False)
-    dataE = db.Column(db.Date)
+    observacao = db.Column(db.String(512))
+    dataencerra = db.Column(db.Date)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     usuario = db.relationship('Usuario')
     competencia_id = db.Column(db.Integer, db.ForeignKey('competencia.id'), nullable=False)
@@ -21,21 +22,22 @@ class Atendimento(db.Model):
     desfecho = db.Column(Enum(Desfecho), nullable=False)
     status = db.Column(Enum(Status), nullable=False)
 
-    def __init__(self, data, demanda, dataE, usuario, competencia, solicitante, modulo, desfecho, status):
+    def __init__(self, data, demanda, observacao, dataE, usuario, competencia, solicitante, modulo, desfecho, status):
         self.data = data
         self.demanda = demanda
-        self.dataE = dataE
+        self.dataencerra = dataE
         self.usuario_id = usuario
         self.competencia_id = competencia
         self.solicitante_id = solicitante
         self.modulo_id = modulo
         self.desfecho = desfecho
         self.status = status
+        self.observacao = observacao
 
 
 class AtendimentoSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'data', 'demanda', 'dataE', 'usuario_id', 'competencia_id', 'solicitante_id', 'modulo_id',
+        fields = ('id', 'data', 'demanda', 'observacao', 'dataE', 'usuario_id', 'competencia_id', 'solicitante_id', 'modulo_id',
                   'desfecho', 'status')
 
 

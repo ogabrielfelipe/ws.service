@@ -3,12 +3,10 @@ from flask_jwt_extended import jwt_required
 from ..controller.AtendimentoController import (
     cadastra_atendimento,
     atualiza_atendimento,
-    busca_atendimento,
-    busca_atendimentos,
+    busca_atendimentos_personalizada,
     delete_atendimento
 )
-from datetime import datetime
-from datetime import timezone, timedelta
+import datetime
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,
@@ -35,11 +33,9 @@ def cad_atendimento():
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = cadastra_atendimento(usuario=get_jwt_identity())
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
-
-
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @atend.route('/Atendimento/Alterar/<codigo>', methods=['PATCH'])
@@ -54,15 +50,14 @@ def alter_atendimento(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = atualiza_atendimento(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
-
-@atend.route('/Atendimento/BuscaAtendimento/<codigo>', methods=['GET'])
+@atend.route('/Atendimento/BuscaAtendimentosPersonalizada', methods=['POST'])
 @jwt_required(locations=["headers"])
-def busc_atendimento(codigo):
+def busc_atendimentos_personalizada():
     token_client = get_jwt()
     exp = datetime.datetime.fromtimestamp(token_client['exp'])
     
@@ -71,31 +66,10 @@ def busc_atendimento(codigo):
     access_token = ''
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
-    response = busca_atendimento(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
-
-
-'''
-    Consulta atendimento não finalizada
-    Montar a consulta com inner join, pegando as informações das outras tabelas
-'''
-@atend.route('/Atendimento/BuscaAtendimentos', methods=['POST'])
-@jwt_required(locations=["headers"])
-def busc_atendimentos():
-    token_client = get_jwt()
-    exp = datetime.datetime.fromtimestamp(token_client['exp'])
-    
-    identity = get_jwt_identity()
-
-    access_token = ''
-    if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
-        access_token = create_access_token(identity=identity, fresh=True)
-    response = busca_atendimentos()
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response = busca_atendimentos_personalizada()
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
 
 
 @atend.route('/Atendimento/Excluir/<codigo>', methods=['DELETE'])
@@ -110,6 +84,6 @@ def excluir_atendimento(codigo):
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
     response = delete_atendimento(codigo)
-    response.headers['token_access'] = access_token
-    response.headers['Access-Control-Expose-Headers'] = 'token_access'
-    return response
+    response[0].headers['token_access'] = access_token
+    response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
+    return response[0], response[1]
