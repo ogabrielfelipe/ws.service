@@ -16,6 +16,7 @@ from wsServiceApp.bluePrints import (
     cliente,
     atendimento
 )
+from .bluePrints.Relatorio import atendimentoRelatorio
 from .model import (
     Solicitante,
     Sistema,
@@ -39,6 +40,7 @@ app.register_blueprint(modulo.mod)
 app.register_blueprint(competencia.comp)
 app.register_blueprint(cliente.client)
 app.register_blueprint(atendimento.atend)
+app.register_blueprint(atendimentoRelatorio.atendRel)
 
 
 db.init_app(app)

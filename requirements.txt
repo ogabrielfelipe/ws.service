@@ -31,3 +31,8 @@ sh==1.14.2
 plumbum==1.7.2
 python-decouple==3.6
 flask_script==2.0.6
+et-xmlfile==1.1.0
+openpyxl==3.0.9
+numpy==1.22.3
+pandas==1.4.2
+python-dateutil==2.8.2
