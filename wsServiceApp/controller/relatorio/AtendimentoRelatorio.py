@@ -17,7 +17,7 @@ def relatorio_atendimento_ordem_data(usuario_logado):
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_atendimentos = text(f"""
-            SELECT atendimento.id as id_atendimetno, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,
+            SELECT atendimento.id as id_atendimento, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,
                     to_char(atendimento.dataencerra, 'DD/MM/YYYY') as data_encerramento, competencia.id as competencia_id,
                     competencia.comp as competencia, competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id,
                     modulo.sigla as sigla_modulo, modulo.nome as nome_modulo, modulo.sistema as sistema_id,
