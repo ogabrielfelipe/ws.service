@@ -123,20 +123,23 @@ def busca_atendimentos_personalizada():
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_atendimentos = text(f"""
-            SELECT atendimento.id as id_atendimento, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,            
-                to_char(atendimento.dataencerra, 'DD/MM/YYYY') as data_encerramento, competencia.id as competencia_id,
-                competencia.comp as competencia, competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id,
-                modulo.sigla as sigla_modulo, modulo.nome as nome_modulo, modulo.sistema as sistema_id,
-                sistema.sigla as sigla_sistema, sistema.nome as nome_sistema, solicitante.id as solicitante_id,
-                solicitante.nome as nome_solicitante, atendimento.demanda as demanda_atendimento, 
-                atendimento.observacao as observacao_atendimento, atendimento.desfecho as desfecho_atendimento, 
-                atendimento.status as status_atendimento, usuario.id as usuario_id, usuario.nome as nome_usuario
+            SELECT atendimento.id as id_atendimetno, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,
+                    to_char(atendimento.dataencerra, 'DD/MM/YYYY') as data_encerramento, competencia.id as competencia_id,
+                    competencia.comp as competencia, competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id,
+                    modulo.sigla as sigla_modulo, modulo.nome as nome_modulo, modulo.sistema as sistema_id,
+                    sistema.sigla as sigla_sistema, sistema.nome as nome_sistema, cliente.id as cliente_id, cliente.nome as nome_cliente,
+                    cliente.sigla as sigla_cliente, solicitante.id as solicitante_id, solicitante.nome as nome_solicitante,
+                    setor.id as setor_id, setor.nome as nome_setor, atendimento.demanda as demanda_atendimento,
+                    atendimento.observacao as observacao_atendimento, atendimento.desfecho as desfecho_atendimento,
+                    atendimento.status as status_atendimento, usuario.id as usuario_id, usuario.nome as nome_usuario
             FROM ATENDIMENTO AS atendimento
             INNER JOIN COMPETENCIA AS competencia ON competencia.id = atendimento.competencia_id
             INNER JOIN MODULO AS modulo ON modulo.id = atendimento.modulo_id
             INNER JOIN SISTEMA AS sistema ON sistema.id = modulo.sistema
             INNER JOIN SOLICITANTE AS solicitante ON solicitante.id = atendimento.solicitante_id
             INNER JOIN USUARIO AS usuario on usuario.id = atendimento.usuario_id
+            INNER JOIN SETOR AS setor ON setor.id = solicitante.setor_id
+            INNER JOIN CLIENTE AS cliente on cliente.id = setor.cliente_id
             {convert_dict_search}
         """)
         consultaAtendimentos = db.session.execute(sql_atendimentos).fetchall()
