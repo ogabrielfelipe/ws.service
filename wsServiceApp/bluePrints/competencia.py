@@ -8,7 +8,6 @@ from ..controller.CompetenciaController import (
     delete_competencia,
     listar_competencias
 )
-from datetime import timezone, timedelta
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,
