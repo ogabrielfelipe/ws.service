@@ -144,7 +144,39 @@ def busca_atendimentos_personalizada():
         """)
         consultaAtendimentos = db.session.execute(sql_atendimentos).fetchall()
         consultaAtendimentos_dict = [dict(u) for u in consultaAtendimentos]
-        return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaAtendimentos_dict, 'error': ''}), 200
+
+        sql_count_atendimentos = text(f"""
+            SELECT atendimento.status as status_atendimento, count(atendimento.status) as total_atendimento 
+                FROM ATENDIMENTO AS atendimento
+            INNER JOIN COMPETENCIA AS competencia ON competencia.id = atendimento.competencia_id
+            INNER JOIN MODULO AS modulo ON modulo.id = atendimento.modulo_id
+            INNER JOIN SISTEMA AS sistema ON sistema.id = modulo.sistema
+            INNER JOIN SOLICITANTE AS solicitante ON solicitante.id = atendimento.solicitante_id
+            INNER JOIN USUARIO AS usuario on usuario.id = atendimento.usuario_id
+            INNER JOIN SETOR AS setor ON setor.id = solicitante.setor_id
+            INNER JOIN CLIENTE AS cliente on cliente.id = setor.cliente_id
+            {convert_dict_search}
+            GROUP BY atendimento.status
+            HAVING atendimento.status IN ('ABERTO', 'ENCERRADO');
+        """)
+        consultaAtendimentosCount = db.session.execute(sql_count_atendimentos).fetchall()
+        consultaAtendimentosCount_dict = [dict(u) for u in consultaAtendimentosCount]
+        dados_count_atendimento = {}
+        for x in consultaAtendimentosCount_dict:
+           if x['status_atendimento'] == 'ABERTO':
+                aux_dados1={
+                            x['status_atendimento'] : x['total_atendimento']
+                        }
+                dados_count_atendimento.update(aux_dados1)
+           elif x['status_atendimento'] == 'ENCERRADO':
+                aux_dados2={
+                            x['status_atendimento'] : x['total_atendimento']
+                        }
+                dados_count_atendimento.update(aux_dados2)
+        print(dados_count_atendimento)
+        return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': { 'atendimentos':consultaAtendimentos_dict, 
+                                                                        'count_atendimentos': dados_count_atendimento
+                                                                        }, 'error': ''}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'msg': 'Nao foi efetuado a busca com sucesso', 'dados': {}, 'error': str(e)}), 500
