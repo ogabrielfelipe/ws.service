@@ -118,12 +118,13 @@ def atualiza_atendimento(id):
         return jsonify({'msg': 'Competencia nao cadastrada', 'dados': {}, 'error': ''}), 404
 
 
-def busca_atendimentos_personalizada(usuario_id):    
+def busca_atendimentos_personalizada(usuario_id, usuario_acesso):    
     resp = request.get_json()    
-    user_json = {
-        'atendimento.usuario_id': ['AND', '=', usuario_id]
-    }
-    resp.update(user_json)
+    if usuario_acesso != 0:
+        user_json = {
+            'atendimento.usuario_id': ['AND', '=', usuario_id]
+        }
+        resp.update(user_json)
     convert_dict_search = convert_pesquisa_consulta(resp)
     try:
         sql_atendimentos = text(f"""
