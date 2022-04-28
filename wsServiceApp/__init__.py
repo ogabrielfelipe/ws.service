@@ -1,3 +1,5 @@
+from pathlib import Path
+import sqlite3
 from flask import Flask
 from pydantic import conset
 from .bluePrints.Login.auth import aut
@@ -50,9 +52,12 @@ CORS(app)
 
 from .bluePrints.Manager import manager
 
-with app.app_context():
-    db.create_all()
 
+
+with app.app_context():
+
+    #Cria as tabelas na base postgresql 
+    db.create_all()
     try:
         extensao = db.session.execute(text("SELECT * FROM pg_available_extensions WHERE name = 'unaccent'")).one()
     except SQLAlchemyError as e:
@@ -62,6 +67,22 @@ with app.app_context():
             print(e)
         print(e)
 
+
+    #Cria usuário na base SQLite3
+    camDataBase = str(Path('TABDEF.db').absolute())
+    conn = sqlite3.connect(camDataBase)
+    curs = conn.cursor()
+    curs.execute("SELECT * from user")
+    lu = curs.fetchone()  
+    if lu is None:           
+        curs2 = conn.cursor()
+        curs2.execute("INSERT INTO user (username, password) VALUES (?, ?)", ['wsService', generate_password_hash('@Acc0164')])
+        conn.commit()
+        conn.close()
+    else:
+        pass
+
+    #Cria usuário na base Postgresql
     users_exist = Usuario.query.all()
     if not users_exist:
         user = Usuario('MASTER', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br', 1)
@@ -71,4 +92,3 @@ with app.app_context():
         except Exception as e:
             db.session.rollback()
             print(e)
-

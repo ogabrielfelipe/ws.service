@@ -3,7 +3,7 @@ from sqlalchemy import Unicode
 
 class User(UserMixin):
     def __init__(self, id, username, password):
-        self.id = Unicode(id)
+        self.id = id
         self.username = username
         self.password = password
         self.authenticated = False
@@ -18,3 +18,5 @@ class User(UserMixin):
          return True
     def get_id(self):
          return self.id
+
+     
