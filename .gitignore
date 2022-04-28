@@ -2,10 +2,5 @@ __pycache__/
 venv/
 backup/
 alchemydumps/
-/wsServiceApp/__pycache__/
-/wsServiceApp/bluePrints/__pycache__/
-/wsServiceApp/bluePrints/Login/__pycache__/
-/wsServiceApp/bluePrints/Usuario/__pycache__/
-/wsServiceApp/controller/__pycache__/
-/wsServiceApp/controller/backup/
-/wsServiceApp/model/__pycache__/
+temp/
+*.pyc
