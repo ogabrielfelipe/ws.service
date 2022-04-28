@@ -29,7 +29,7 @@ from .model import (
 )
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder= 'template', static_folder='static')
 app.config.from_object('config')
 app.register_blueprint(aut)
 app.register_blueprint(usuario.user)
@@ -48,6 +48,7 @@ ma.init_app(app)
 jwt.init_app(app)
 CORS(app)
 
+from .bluePrints.Manager import manager
 
 with app.app_context():
     db.create_all()
