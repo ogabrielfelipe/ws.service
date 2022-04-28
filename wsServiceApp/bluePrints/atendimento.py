@@ -66,7 +66,7 @@ def busc_atendimentos_personalizada():
     access_token = ''
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
-    response = busca_atendimentos_personalizada()
+    response = busca_atendimentos_personalizada(identity['id'])
     response[0].headers['token_access'] = access_token
     response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
     return response[0], response[1]
