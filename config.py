@@ -11,14 +11,13 @@ config.read('CONFIGDB.ini')
 
 load_dotenv(".env")
 
-host = "db.bnrldhgbsuswrprchcij.supabase.co"
+host = "db.kvgqpvcaxxigkhdqxgye.supabase.co"
 db = "postgres"
-port = "5432"
+port = "6543"
 user = "postgres"
-passwd = "wIszTw5!&#9Z"
+passwd = "aRg*Ov%t$o*1"
 
 DEBUG = True
-#SQLALCHEMY_DATABASE_URI = f"sqlite:///{config.get('DATABASE', 'DB')}"
 SQLALCHEMY_DATABASE_URI =f"postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 JSONIFY_PRETTYPRINT_REGULAR = False

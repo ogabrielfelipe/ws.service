@@ -1,0 +1,26 @@
+{%extends  "painel.html" %}
+
+{%block main%}
+
+    <div class="container-fluid mt-2 bg-light p-3" style="max-width: 98vw; min-height: 89vh;">
+        <div class="container-sm" style="max-width: 500px;">
+            <div class="mb-3 row">
+                <label for="usuarioManager" class="col-sm-2 col-form-label">Usuário: </label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control bg-white" name="usuarioManager" id="usuarioManager" >
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="senhaManager" class="col-sm-2 col-form-label">Senha: </label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control bg-white" name="senhaManager" id="senhaManager">
+                </div>
+              </div>
+              <div class="mb-3 row d-flex align-self-center align-self-center">
+                <button class="btn btn-secondary " type="submit" style="max-width: 100px;">
+                    Login
+                </button>
+            </div> 
+        </div>  
+    </div>
+{%endblock%}
