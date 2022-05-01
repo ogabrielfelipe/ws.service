@@ -9,7 +9,8 @@ from ...model.TABDEF.User import User
 from werkzeug.security import check_password_hash
 from ...controller.manager.ManagerController import (
     testa_conexao,
-    salva_ini_conexao
+    salva_ini_conexao,
+    Buscar_ini_conexao
 )
 
 
@@ -85,7 +86,14 @@ def route_manager_configuracao_bd():
 def route_manager_configuracao_bd_testar():
         return testa_conexao()
 
+
 @app.route('/Manager/Painel/Configuracao/BD/Salvar', methods=['POST'])
 #@login_required
 def route_manager_configuracao_bd_salvar():
         return salva_ini_conexao()
+
+
+@app.route('/Manager/Painel/Configuracao/BD/Buscar', methods=['POST'])
+#@login_required
+def route_manager_configuracao_bd_Buscar():
+        return Buscar_ini_conexao()

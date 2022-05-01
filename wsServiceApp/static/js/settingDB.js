@@ -1,4 +1,18 @@
 $(document).ready(function(){
+    EnviaTestaConexao({}, '/Manager/Painel/Configuracao/BD/Buscar', 'POST')
+        .then((resposta)=>{
+            var url = $('#urlbasedados').val(resposta['dados']['url']);
+            var username = $('#Usuariobasedados').val(resposta['dados']['username']);
+            var nomeDB = $('#Nomebasedados').val(resposta['dados']['nameDB']);
+            var porta = $('#Portabasedados').val(resposta['dados']['porta']);
+            var senha = $('#senhabasedados').val('');
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+
+
+
     $('#testaConexaoDB').click(()=>{
         var url = $('#urlbasedados').val();
         var username = $('#Usuariobasedados').val();

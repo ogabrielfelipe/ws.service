@@ -1,9 +1,14 @@
 import json
+from cairo import Path
 from flask import jsonify, request
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 import psycopg2
 import configparser
+
+
+
+
 
 
 def testa_conexao():
@@ -36,3 +41,19 @@ def salva_ini_conexao():
         return jsonify({'msg': 'Salvo com secesso'}), 200
     except Exception as e:
         return jsonify({'msg': 'Nao foi possivel gerar o arquivo', 'error': str(e)}), 500
+
+
+def Buscar_ini_conexao():
+    config = configparser.ConfigParser()
+    try:
+        config.read('CONFIG.ini')
+        result = {
+            'url': config['DB']['url'], 
+            'nameDB': config['DB']['nomedb'], 
+            'porta': config['DB']['porta'], 
+            'username': config['DB']['username'] 
+        }
+        return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': result}), 200
+    except Exception as e:
+        return jsonify({'msg': 'Nao foi possivel ler o arquivo ini', 'error': str(e)}), 500
+    
