@@ -1,9 +1,11 @@
 from flask import jsonify, request
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
+import cryptocode
 import psycopg2
 import configparser
 
+PASS_KEY = 'JtWhyqEZ'
 
 def testa_conexao():
     resp = request.get_json()
@@ -28,7 +30,14 @@ def testa_conexao():
 def salva_ini_conexao():
     resp = request.get_json()
     config = configparser.ConfigParser()
-    config['DB'] = resp
+    entry = {
+        'url': resp['url'],
+        'username': resp['username'],
+        'nomeDB': resp['nomeDB'],
+        'porta': resp['porta'],
+        'senha': cryptocode.encrypt(resp['senha'], PASS_KEY)
+    }
+    config['DB'] = entry
     try:
         with open('CONFIG.ini', 'w', encoding='UTF-8') as confingfile:
             config.write(confingfile)

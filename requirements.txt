@@ -42,3 +42,6 @@ rsa==4.8
 pycparser==2.21
 cffi==1.15.0
 cryptography==37.0.1
+pycrypto==2.6.1 
+simple-crypt==4.1.7
+cryptocode==0.1
