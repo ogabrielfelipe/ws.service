@@ -17,6 +17,7 @@ try:
     user = config['DB']['username'] 
     passwd = config['DB']['senha'] 
 except Exception as e:
+    print(e)
     host = '' 
     db = '' 
     port = '' 
