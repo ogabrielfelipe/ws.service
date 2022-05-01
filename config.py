@@ -25,6 +25,7 @@ except Exception as e:
 
 DEBUG = True
 SQLALCHEMY_DATABASE_URI =f"postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}"
+print(SQLALCHEMY_DATABASE_URI)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 JSONIFY_PRETTYPRINT_REGULAR = False
 SECRET_KEY = "MLoD*jIHJay%TnT*6%3l6El^j*Z^pn"
