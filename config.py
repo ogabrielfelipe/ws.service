@@ -9,14 +9,14 @@ load_dotenv(".env")
 
 try:
     config = configparser.ConfigParser()
-    config.read('CONFIGDB.ini')
+    config.read('CONFIG.ini')
 
     host = config['DB']['url'] 
     db = config['DB']['nomedb'] 
     port = config['DB']['porta'] 
     user = config['DB']['username'] 
     passwd = config['DB']['senha'] 
-except:
+except Exception as e:
     host = '' 
     db = '' 
     port = '' 
@@ -24,9 +24,7 @@ except:
     passwd = ''
 
 DEBUG = True
-
 SQLALCHEMY_DATABASE_URI =f"postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}"
-
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 JSONIFY_PRETTYPRINT_REGULAR = False
 SECRET_KEY = "MLoD*jIHJay%TnT*6%3l6El^j*Z^pn"

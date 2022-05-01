@@ -44,7 +44,7 @@ def autentica_usuario(username, senha):
                 return None
         else:
             return 'inativo'
-    else:
+    else:   
         return 'username nao existe'
 
 
