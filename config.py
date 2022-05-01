@@ -6,8 +6,8 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 
-config = configparser.ConfigParser()
-config.read('CONFIGDB.ini')
+#config = configparser.ConfigParser()
+#config.read('CONFIGDB.ini')
 
 load_dotenv(".env")
 

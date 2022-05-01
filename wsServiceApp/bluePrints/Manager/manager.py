@@ -55,7 +55,7 @@ def route_manager_login():
 
 
 @app.route('/Manager/Painel', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def route_manager_painel():      
         return render_template('painel.html')
 
@@ -68,6 +68,7 @@ def route_manager_logout():
     
 
 @app.route('/Manager/Painel/Configuracao/BD', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def route_manager_configuracao_bd():  
         return render_template('settingDB.html')
+
