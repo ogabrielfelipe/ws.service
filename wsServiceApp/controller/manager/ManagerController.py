@@ -1,14 +1,8 @@
-import json
-from cairo import Path
 from flask import jsonify, request
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 import psycopg2
 import configparser
-
-
-
-
 
 
 def testa_conexao():
