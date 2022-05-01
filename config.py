@@ -11,11 +11,11 @@ config.read('CONFIGDB.ini')
 
 load_dotenv(".env")
 
-host = config['DB']['url'] #"db.xryvtjvsdxdefoleavgc.supabase.co"
-db = config['DB']['nomedb'] #"postgres"
-port = config['DB']['porta'] #"6543"
-user = config['DB']['username'] #"postgres"
-passwd = config['DB']['senha'] #"!KF&R39CVwgi"
+host = config['DB']['url'] 
+db = config['DB']['nomedb'] 
+port = config['DB']['porta'] 
+user = config['DB']['username'] 
+passwd = config['DB']['senha'] 
 
 DEBUG = True
 SQLALCHEMY_DATABASE_URI =f"postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}"
