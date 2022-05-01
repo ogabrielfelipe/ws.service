@@ -3,10 +3,14 @@ import sqlite3
 from cryptography.fernet import Fernet
 from wsServiceApp import app
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, jsonify, redirect, render_template, request, url_for
 from flask_jwt_extended import jwt_required
 from ...model.TABDEF.User import User
 from werkzeug.security import check_password_hash
+from ...controller.manager.ManagerController import (
+    testa_conexao,
+    salva_ini_conexao
+)
 
 
 key = Fernet.generate_key()
@@ -70,5 +74,18 @@ def route_manager_logout():
 @app.route('/Manager/Painel/Configuracao/BD', methods=['GET', 'POST'])
 #@login_required
 def route_manager_configuracao_bd():  
-        return render_template('settingDB.html')
+    if request.method == 'POST':
+        return testa_conexao()
+    return render_template('settingDB.html')
 
+
+
+@app.route('/Manager/Painel/Configuracao/BD/Testar', methods=['POST'])
+#@login_required
+def route_manager_configuracao_bd_testar():
+        return testa_conexao()
+
+@app.route('/Manager/Painel/Configuracao/BD/Salvar', methods=['POST'])
+#@login_required
+def route_manager_configuracao_bd_salvar():
+        return salva_ini_conexao()

@@ -5,3 +5,4 @@ alchemydumps/
 temp/
 *.pyc
 *.db
+*.ini

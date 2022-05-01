@@ -56,21 +56,8 @@ from .bluePrints.Manager import manager
 
 with app.app_context():
 
-    #Cria as tabelas na base postgresql 
-    db.create_all()
-    try:
-        extensao = db.session.execute(text("SELECT * FROM pg_available_extensions WHERE name = 'unaccent'")).one()
-    except SQLAlchemyError as e:
-        try:
-            db.session.execute('CREATE EXTENSION UNACCENT;')
-        except SQLAlchemyError as e:
-            print(e)
-        print(e)
-
-
     #Cria usuário na base SQLite3
     camDataBase = str(Path('TABDEF.db').absolute())
-
     conn = sqlite3.connect(camDataBase)
     curs = conn.cursor()
     try:
@@ -90,7 +77,6 @@ with app.app_context():
         curs.execute("SELECT * from user")
     lu = curs.fetchone()  
     if lu is None:   
-
         conn4 = sqlite3.connect(camDataBase)
         curs = conn4.cursor()        
         curs2 = conn4.cursor()
@@ -99,6 +85,20 @@ with app.app_context():
         conn4.close()
     else:
         pass
+
+
+
+    #Cria as tabelas na base postgresql 
+    db.create_all()
+
+    try:
+        extensao = db.session.execute(text("SELECT * FROM pg_available_extensions WHERE name = 'unaccent'")).one()
+    except SQLAlchemyError as e:
+        try:
+            db.session.execute('CREATE EXTENSION UNACCENT;')
+        except SQLAlchemyError as e:
+            print(e)
+        print(e)
 
     #Cria usuário na base Postgresql
     users_exist = Usuario.query.all()
