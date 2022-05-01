@@ -87,26 +87,28 @@ with app.app_context():
         pass
 
 
+    try:            
+        #Cria as tabelas na base postgresql 
+        db.create_all()
 
-    #Cria as tabelas na base postgresql 
-    db.create_all()
-
-    try:
-        extensao = db.session.execute(text("SELECT * FROM pg_available_extensions WHERE name = 'unaccent'")).one()
-    except SQLAlchemyError as e:
         try:
-            db.session.execute('CREATE EXTENSION UNACCENT;')
+            extensao = db.session.execute(text("SELECT * FROM pg_available_extensions WHERE name = 'unaccent'")).one()
         except SQLAlchemyError as e:
+            try:
+                db.session.execute('CREATE EXTENSION UNACCENT;')
+            except SQLAlchemyError as e:
+                print(e)
             print(e)
-        print(e)
 
-    #Cria usuário na base Postgresql
-    users_exist = Usuario.query.all()
-    if not users_exist:
-        user = Usuario('MASTER', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br', 1)
-        try:
-            db.session.add(user)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            print(e)
+        #Cria usuário na base Postgresql
+        users_exist = Usuario.query.all()
+        if not users_exist:
+            user = Usuario('MASTER', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br', 1)
+            try:
+                db.session.add(user)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                print(e)
+    except:
+        pass

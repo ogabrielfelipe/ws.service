@@ -6,16 +6,16 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 
-#config = configparser.ConfigParser()
-#config.read('CONFIGDB.ini')
+config = configparser.ConfigParser()
+config.read('CONFIGDB.ini')
 
 load_dotenv(".env")
 
-host = "db.kvgqpvcaxxigkhdqxgye.supabase.co"
-db = "postgres"
-port = "6543"
-user = "postgres"
-passwd = "aRg*Ov%t$o*1"
+host = config['DB']['url'] #"db.xryvtjvsdxdefoleavgc.supabase.co"
+db = config['DB']['nomedb'] #"postgres"
+port = config['DB']['porta'] #"6543"
+user = config['DB']['username'] #"postgres"
+passwd = config['DB']['senha'] #"!KF&R39CVwgi"
 
 DEBUG = True
 SQLALCHEMY_DATABASE_URI =f"postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}"
