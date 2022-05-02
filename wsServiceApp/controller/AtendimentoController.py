@@ -130,7 +130,7 @@ def busca_atendimentos_personalizada(usuario_id, usuario_acesso):
         sql_atendimentos = text(f"""
             SELECT atendimento.id as id_atendimento, to_char(atendimento.data, 'DD/MM/YYYY') as data_abertura,
                     to_char(atendimento.dataencerra, 'DD/MM/YYYY') as data_encerramento, competencia.id as competencia_id,
-                    competencia.comp as competencia, competencia.ano as ano_competencia, atendimento.modulo_id as modulo_id,
+                    competencia.comp as competencia, competencia.ano as ano_competencia, competencia.trava as trava_competencia, atendimento.modulo_id as modulo_id,
                     modulo.sigla as sigla_modulo, modulo.nome as nome_modulo, modulo.sistema as sistema_id,
                     sistema.sigla as sigla_sistema, sistema.nome as nome_sistema, cliente.id as cliente_id, cliente.nome as nome_cliente,
                     cliente.sigla as sigla_cliente, solicitante.id as solicitante_id, solicitante.nome as nome_solicitante,
