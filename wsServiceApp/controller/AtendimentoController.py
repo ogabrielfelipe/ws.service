@@ -180,7 +180,6 @@ def busca_atendimentos_personalizada(usuario_id, usuario_acesso):
                             x['status_atendimento'] : x['total_atendimento']
                         }
                 dados_count_atendimento.update(aux_dados2)
-        print(dados_count_atendimento)
         return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': { 'atendimentos':consultaAtendimentos_dict, 
                                                                         'count_atendimentos': dados_count_atendimento
                                                                         }, 'error': ''}), 200
