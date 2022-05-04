@@ -4,3 +4,4 @@ backup/
 alchemydumps/
 temp/
 *.pyc
+*.mdj
