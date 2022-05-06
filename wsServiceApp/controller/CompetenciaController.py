@@ -19,35 +19,40 @@ def cadastra_competencia(usuario):
 
     competencia = Competencia(comp=comp, ano=ano, dataI=dataI, dataF=dataF, trava=trava, usuario=usuario['id'])
     if busca_competencia_por_usuario_comp_ano(comp=comp, ano=ano):
-        try:
-            db.session.add(competencia)
-            db.session.commit()
-            result = competencia_schema.dump(competencia)
-            return jsonify({'message': 'Competencia com sucesso', 'dados': result, 'error': ''}), 201
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'message': 'Erro ao cadastrar', 'dados': {}, 'error': str(e)}), 500
+        if usuario['acesso'] == 0:                
+            try:
+                db.session.add(competencia)
+                db.session.commit()
+                result = competencia_schema.dump(competencia)
+                return jsonify({'message': 'Competencia com sucesso', 'dados': result, 'error': ''}), 201
+            except Exception as e:
+                db.session.rollback()
+                return jsonify({'message': 'Erro ao cadastrar', 'dados': {}, 'error': str(e)}), 500
+        else:
+            return jsonify({'message': 'Usuario sem permissao', 'dados': {}, 'error': ''}), 401
     else:
         return jsonify({'message': 'Ja existe uma competencia criada', 'dados': {}, 'error': ''}), 401
 
 
-def altera_trava_competencia(id):
+def altera_trava_competencia(id, usuario):
     resp = request.get_json()
     trava = bool(resp['trava'])
 
     competencia = Competencia.query.get(id)
     if not competencia:
         return jsonify({'message': 'Competencia nao encontrado', 'dados': {}}), 404
-
-    try:
-        competencia.trava = trava
-        db.session.commit()
-        result = competencia_schema.dump(competencia)
-        return jsonify({'message': 'Competencia atualizado', 'dados': result}), 200
-    except:
-        db.session.rollback()
-        return jsonify({'message': 'Nao foi possivel atualizar', 'dados': {}})
-
+    if usuario['acesso'] == 0:   
+        try:
+            competencia.trava = trava
+            db.session.commit()
+            result = competencia_schema.dump(competencia)
+            return jsonify({'message': 'Competencia atualizado', 'dados': result}), 200
+        except:
+            db.session.rollback()
+            return jsonify({'message': 'Nao foi possivel atualizar', 'dados': {}})
+    else:
+        return jsonify({'message': 'Usuario sem permissao', 'dados': {}, 'error': ''}), 401
+    
 
 def busca_competencias():
     resp = request.get_json()
@@ -70,7 +75,6 @@ def busca_competencias():
 
 
 def listar_competencias():
-
     currentDateTime = datetime.now()
     date = currentDateTime.date()
     ano = date.strftime("%Y")
@@ -105,19 +109,22 @@ def busca_competencia_por_usuario_comp_ano(comp, ano):
     return False
 
 
-def delete_competencia(id):
+def delete_competencia(id, usuario):
     competencia = Competencia.query.get(id)
     if not competencia:
         return jsonify({'message': 'Competencia nao encontrado', 'dados': {}, 'error': ''}), 404
 
     if busca_atendimento_por_competencia(competencia.id):
-        try:
-            db.session.delete(competencia)
-            db.session.commit()
-            result = competencia_schema.dump(competencia)
-            return jsonify({'message': 'Competencia excluido', 'dados': result, 'error': ''}), 200
-        except Exception as e:
-            return jsonify({'message': 'Nao foi possível excluir', 'dados': {}, 'error': str(e)}), 500
+        if usuario['acesso'] == 0:
+            try:
+                db.session.delete(competencia)
+                db.session.commit()
+                result = competencia_schema.dump(competencia)
+                return jsonify({'message': 'Competencia excluido', 'dados': result, 'error': ''}), 200
+            except Exception as e:
+                return jsonify({'message': 'Nao foi possível excluir', 'dados': {}, 'error': str(e)}), 500
+        else:
+            return jsonify({'message': 'Usuario sem permissao', 'dados': {}, 'error': ''}), 401
     else:
         return jsonify({'message': 'Competencia ja possui Atendimento Vinculado', 'dados': {}, 'error': ''}), 403
 

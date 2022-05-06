@@ -54,7 +54,7 @@ def alter_trava_competencia(codigo):
     access_token = ''
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
-    response = altera_trava_competencia(codigo)
+    response = altera_trava_competencia(codigo, identity)
     response[0].headers['token_access'] = access_token
     response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
     return response[0], response[1]
@@ -103,7 +103,7 @@ def exclui_competencia(codigo):
     access_token = ''
     if datetime.datetime.now() >= exp-datetime.timedelta(minutes=10):
         access_token = create_access_token(identity=identity, fresh=True)
-    response = delete_competencia(codigo)
+    response = delete_competencia(codigo, identity)
     response[0].headers['token_access'] = access_token
     response[0].headers['Access-Control-Expose-Headers'] = 'token_access'
     return response[0], response[1]
