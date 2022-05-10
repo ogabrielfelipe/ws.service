@@ -6,3 +6,4 @@ temp/
 *.pyc
 *.mdj
 Documentacao/
+*.json
