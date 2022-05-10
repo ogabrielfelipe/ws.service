@@ -7,7 +7,7 @@
 - 1.0.0 
 <p align="justify">
     Versão Inicial do projeto, onde foi implementado as primeiras funcionalidades, como:
-    - Gerenciar Sistemas;
+    :heavy_check_mark: Gerenciar Sistemas;
     - Gerenciar Módulo;
     - Gerenciar Cliente;
     - Gerenciar Setor;
