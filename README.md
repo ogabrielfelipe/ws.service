@@ -8,12 +8,12 @@
 <p align="justify">
     Versão Inicial do projeto, onde foi implementado as primeiras funcionalidades, como:    
 </p>
-    - Gerenciar Sistemas;
-    - Gerenciar Módulo;
-    - Gerenciar Cliente;
-    - Gerenciar Setor;
-    - Gerenciar Competência;
-    - Gerenciar Atendimento;
+    - Gerenciar Sistemas.
+    - Gerenciar Módulo.
+    - Gerenciar Cliente.
+    - Gerenciar Setor.
+    - Gerenciar Competência.
+    - Gerenciar Atendimento.
     - Gerenciar Usuários.
 
 ###
