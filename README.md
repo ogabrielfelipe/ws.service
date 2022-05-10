@@ -4,10 +4,10 @@
 
 ## Versões
 
-- 1.0.0 
-<p align="justify">
+### 1.0.0 
+
     Versão Inicial do projeto, onde foi implementado as primeiras funcionalidades, como:    
-</p>
+
     - Gerenciar Sistemas.
     - Gerenciar Módulo.
     - Gerenciar Cliente.
