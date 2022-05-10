@@ -4,7 +4,7 @@
 
 ## Versões
 
-### 1.0.0 
+- 1.0.0 
 
     Versão Inicial do projeto, onde foi implementado as primeiras funcionalidades, como:    
 
