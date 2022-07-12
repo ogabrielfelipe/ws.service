@@ -17,6 +17,7 @@ port = "5432"
 user = "postgres"
 passwd = "wIszTw5!&#9Z"
 
+
 DEBUG = True
 #SQLALCHEMY_DATABASE_URI = f"sqlite:///{config.get('DATABASE', 'DB')}"
 SQLALCHEMY_DATABASE_URI =f"postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}"

@@ -147,7 +147,7 @@ def busca_atendimentos_personalizada(usuario_id, usuario_acesso):
             INNER JOIN CLIENTE AS cliente on cliente.id = setor.cliente_id
             {convert_dict_search}
             ORDER BY 
-                atendimento.id
+                atendimento.id DESC
         """)
         consultaAtendimentos = db.session.execute(sql_atendimentos).fetchall()
         consultaAtendimentos_dict = [dict(u) for u in consultaAtendimentos]
