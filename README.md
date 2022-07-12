@@ -15,7 +15,6 @@
     - Gerenciar Atendimento;
     - Gerenciar Usuários.
 
-
 ###
 
 - 1.1.0
