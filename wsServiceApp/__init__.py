@@ -1,3 +1,5 @@
+from pathlib import Path
+import sqlite3
 from flask import Flask
 from pydantic import conset
 from .bluePrints.Login.auth import aut
@@ -29,7 +31,7 @@ from .model import (
 )
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder= 'template', static_folder='static')
 app.config.from_object('config')
 app.register_blueprint(aut)
 app.register_blueprint(usuario.user)
@@ -48,26 +50,65 @@ ma.init_app(app)
 jwt.init_app(app)
 CORS(app)
 
+from .bluePrints.Manager import manager
+
+
 
 with app.app_context():
-    db.create_all()
 
+    #Cria usuário na base SQLite3
+    camDataBase = str(Path('TABDEF.db').absolute())
+    conn = sqlite3.connect(camDataBase)
+    curs = conn.cursor()
     try:
-        extensao = db.session.execute(text("SELECT * FROM pg_available_extensions WHERE name = 'unaccent'")).one()
-    except SQLAlchemyError as e:
+        curs.execute("SELECT * from user")
+    except:
+        curs.execute("""
+        CREATE TABLE IF NOT EXISTS user (
+            user_id INTEGER PRIMARY KEY,
+            username TEXT,
+            password TEXT
+        );""")
+        conn.commit()
+        conn.close()
+
+        conn3 = sqlite3.connect(camDataBase)
+        curs = conn3.cursor()
+        curs.execute("SELECT * from user")
+    lu = curs.fetchone()  
+    if lu is None:   
+        conn4 = sqlite3.connect(camDataBase)
+        curs = conn4.cursor()        
+        curs2 = conn4.cursor()
+        curs2.execute("INSERT INTO user (username, password) VALUES (?, ?)", ['wsService', generate_password_hash('@Acc0164')])
+        conn4.commit()
+        conn4.close()
+    else:
+        pass
+
+
+    try:            
+        #Cria as tabelas na base postgresql 
+        db.create_all()
+
         try:
-            db.session.execute('CREATE EXTENSION UNACCENT;')
+            extensao = db.session.execute(text("SELECT * FROM pg_available_extensions WHERE name = 'unaccent'")).one()
         except SQLAlchemyError as e:
-            print(e)
-        print(e)
-
-    users_exist = Usuario.query.all()
-    if not users_exist:
-        user = Usuario('MASTER', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br', 1)
-        try:
-            db.session.add(user)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
+            try:
+                db.session.execute('CREATE EXTENSION UNACCENT;')
+            except SQLAlchemyError as e:
+                print(e)
             print(e)
 
+        #Cria usuário na base Postgresql
+        users_exist = Usuario.query.all()
+        if not users_exist:
+            user = Usuario('MASTER', 'Master', generate_password_hash('master1'), 0, 'master@master.com.br', 1)
+            try:
+                db.session.add(user)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                print(e)
+    except:
+        pass
