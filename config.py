@@ -4,7 +4,6 @@ import string
 import configparser
 from datetime import timedelta
 from dotenv import load_dotenv
-import cryptocode
 
 
 PASS_KEY = 'JtWhyqEZ'
@@ -13,22 +12,11 @@ PASS_KEY = 'JtWhyqEZ'
 load_dotenv(".env")
 
 
-try:
-    config = configparser.ConfigParser()
-    config.read('CONFIG.ini')
-
-    host = config['DB']['url'] 
-    db = config['DB']['nomedb'] 
-    port = config['DB']['porta'] 
-    user = config['DB']['username'] 
-    passwd = cryptocode.decrypt(config['DB']['senha'], PASS_KEY) 
-except Exception as e:
-    print(e)
-    host = '' 
-    db = '' 
-    port = '' 
-    user = '' 
-    passwd = ''
+host = "db.bnrldhgbsuswrprchcij.supabase.co"
+db = "postgres"
+port = "5432"
+user = "postgres"
+passwd = "wIszTw5!&#9Z"
 
 
 DEBUG = True

@@ -1,5 +1,4 @@
 from pathlib import Path
-import sqlite3
 from flask import Flask
 from pydantic import conset
 from .bluePrints.Login.auth import aut
@@ -50,42 +49,8 @@ ma.init_app(app)
 jwt.init_app(app)
 CORS(app)
 
-from .bluePrints.Manager import manager
-
-
 
 with app.app_context():
-
-    #Cria usuário na base SQLite3
-    camDataBase = str(Path('TABDEF.db').absolute())
-    conn = sqlite3.connect(camDataBase)
-    curs = conn.cursor()
-    try:
-        curs.execute("SELECT * from user")
-    except:
-        curs.execute("""
-        CREATE TABLE IF NOT EXISTS user (
-            user_id INTEGER PRIMARY KEY,
-            username TEXT,
-            password TEXT
-        );""")
-        conn.commit()
-        conn.close()
-
-        conn3 = sqlite3.connect(camDataBase)
-        curs = conn3.cursor()
-        curs.execute("SELECT * from user")
-    lu = curs.fetchone()  
-    if lu is None:   
-        conn4 = sqlite3.connect(camDataBase)
-        curs = conn4.cursor()        
-        curs2 = conn4.cursor()
-        curs2.execute("INSERT INTO user (username, password) VALUES (?, ?)", ['wsService', generate_password_hash('@Acc0164')])
-        conn4.commit()
-        conn4.close()
-    else:
-        pass
-
 
     try:            
         #Cria as tabelas na base postgresql 
