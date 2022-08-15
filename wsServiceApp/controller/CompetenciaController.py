@@ -8,6 +8,22 @@ from sqlalchemy import and_, text
 from .util import calcula_intervalo_mes, convert_pesquisa_consulta
 
 
+dict_english_portuguese = {
+    "January": "Janeiro",
+    "February": "Fevereiro",
+    "March": "Março",
+    "April": "Abril",
+    "May": "Maio",
+    "June": "Junho",
+    "July": "Julho",
+    "August": "Agosto",
+    "September": "Setembro",
+    "October": "Outubro",
+    "November": "Novembro",
+    "December": "Dezembro"
+}
+
+
 def cadastra_competencia(usuario):
     resp = request.get_json()
     comp = resp['comp']
@@ -61,7 +77,8 @@ def busca_competencias():
         sql_comp = text(f"""
                 SELECT competencia.id as id_competencia, competencia.comp as mes_competencia, competencia.ano as ano_competencia,
                     to_char(competencia."dataI", 'DD/MM/YYYY') as data_inicial, to_char(competencia."dataF", 'DD/MM/YYYY') as data_final,
-                    competencia.trava as trava_competencia, competencia.usuario_id as usuario_id, usuario.nome as nome_usuario
+                    to_char(competencia."dataI", 'TMMonth/YYYY') as mes_ano_formatado, competencia.trava as trava_competencia, 
+                    competencia.usuario_id as usuario_id, usuario.nome as nome_usuario
                 FROM COMPETENCIA as competencia
                 INNER JOIN USUARIO AS usuario on usuario.id = competencia.usuario_id
                 {convert_dict_search}
@@ -69,6 +86,11 @@ def busca_competencias():
         """)
         consultaCompetencia = db.session.execute(sql_comp).fetchall()
         consultaCompetencia_dict = [dict(u) for u in consultaCompetencia]
+        for x in range(0, len(consultaCompetencia_dict)):
+            aux_consulta = consultaCompetencia_dict[x]['mes_ano_formatado'].split('/')
+            aux_consulta[0] = dict_english_portuguese.get(aux_consulta[0])
+            consultaCompetencia_dict[x]['mes_ano_formatado'] = '/'.join(aux_consulta)
+
         return jsonify({'msg': 'Busca efetuada com sucesso', 'dados': consultaCompetencia_dict, 'error': ''}), 200
     except Exception as e:
         return jsonify({'msg': 'Não foi possível fazer a busca', 'dados': {}, 'error': str(e)}), 500
