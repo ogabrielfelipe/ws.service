@@ -12,11 +12,11 @@ PASS_KEY = 'JtWhyqEZ'
 load_dotenv(".env")
 
 
-host = "db.bnrldhgbsuswrprchcij.supabase.co"
-db = "postgres"
-port = "5432"
-user = "postgres"
-passwd = "wIszTw5!&#9Z"
+host = ""
+db = ""
+port = ""
+user = ""
+passwd = ""
 
 
 DEBUG = True
