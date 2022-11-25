@@ -1,4 +1,4 @@
-# WS-Service
+# WS-Service : API
 
 O objetivo do sistema é para realizar o controllhe de HelpDesks, onde o administrador poderia cadastrar a competência (mês vigente) e com isso os usuários poderiam realizar o cadastro de solicitantes, os sistemas que prestam suporte e os módulos, na virada do mês o administrador fecharia a competência e não poderia ser realizado mais nenhuma cadastro na competência anterior e o mesmo poderia exportar os atendimentos dos usuários.
 
