@@ -27,7 +27,7 @@ scramp==1.4.1
 six==1.16.0
 SQLAlchemy==1.4.31
 typing-extensions==4.0.1
-Werkzeug==2.0.2
+Werkzeug==2.2.3
 sh==1.14.2
 plumbum==1.7.2
 python-decouple==3.6
